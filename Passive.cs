@@ -12,11 +12,11 @@ public abstract class Passive
         description = desc;
     }
     
-    public abstract void ApplyEffect(Hero hero);
+    public abstract void ApplyEffect(IFighter fighter);
 
 
-    public virtual void OnTakeDamage(Hero hero, int damage) {}
-    public virtual void OnAttack(Hero hero, IFighter target, int damage) {}
+    public virtual void OnTakeDamage(IFighter fighter, int damage) {}
+    public virtual void OnAttack(IFighter fighter, IFighter target, int damage) {}
 
     
 }
