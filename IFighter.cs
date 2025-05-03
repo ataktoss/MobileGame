@@ -9,32 +9,41 @@ public class IFighter : MonoBehaviour
     public string unitName;
     public int life;
     public int mana;
-    public int attackSpeed;
+    public float attackSpeed;
+    public int _currentLife;
+    public int attackRange;
+    public float movementSpeed= 5f;
+    public int attackDamage;
+    private int _currentMana = 0;
+    
     public bool melee;
+    public bool isAlive = true;
     public bool isAttacking = false;
     public Spell fighterSpell;
     public IFighter currentTarget;
     public List<Passive> passives = new List<Passive>();
     public List<StatusEffect> activeEffects = new List<StatusEffect>();
-
+    
     //Events
     public event Action<int> OnHealthChanged;
     public event Action<int> OnManaChanged;
     public event Action OnAttackPerformed;
     public event Action OnTakeDamage;
 
+    
 
 
-
-    public int _currentLife;
-    private int _currentMana;
+    
     private Coroutine attackCoroutine;
 
 
     public void TakeDamage(int amount){
 
-        _currentLife -= amount;
-        Debug.Log(unitName + " took " + amount + " damage!" + "Now life is : " + _currentLife);
+        if(this.gameObject != null){
+            _currentLife -= amount;
+        //Debug.Log(unitName + " took " + amount + " damage!" + "Now life is : " + _currentLife);
+
+       
 
         // ✨ Fire events
         OnHealthChanged?.Invoke(_currentLife);
@@ -44,9 +53,46 @@ public class IFighter : MonoBehaviour
         {
             passive.OnTakeDamage(this, amount); // <- tell passives
         }
+        if(_currentLife <= 0){
+            isAlive = false;
+            isAttacking = false;
+            StopAllCoroutines();
+            this.enabled=false;
+            Destroy(this.gameObject);
+        }
 
+
+        }
+        
+        
 
     }
+
+    public void Die()
+    {
+        if (!isAlive) return; // prevent double death
+
+        isAlive = false;
+        StopAllCoroutines(); // optional if you're running anything
+
+        // Disable behavior
+        this.enabled = false;
+        Destroy(this.gameObject);
+
+        // Optionally disable visuals/collider/etc.
+        //GetComponent<Collider2D>()?.enabled = false;
+
+        // Play death animation or delay actual destruction
+        StartCoroutine(DelayedDeath());
+    }
+    IEnumerator DelayedDeath()
+    {
+        yield return new WaitForSeconds(0.5f); // time for death animation if needed
+        Destroy(gameObject);
+    }
+
+
+
 
     public void StartAttack(IFighter target){
         currentTarget = target;
@@ -55,7 +101,7 @@ public class IFighter : MonoBehaviour
             attackCoroutine  = StartCoroutine(AttackRoutine());
         }
     }
-
+    
 
 
     public void StopAttack(){
@@ -70,7 +116,10 @@ public class IFighter : MonoBehaviour
     private IEnumerator AttackRoutine(){
         while(isAttacking){
             yield return new WaitForSeconds(attackSpeed);
-            Attack(currentTarget,10);
+            if(currentTarget != null){
+                Attack(currentTarget,attackDamage);
+            }
+            
         }
 
 
@@ -81,7 +130,8 @@ public class IFighter : MonoBehaviour
     public void Attack(IFighter target, int damage)
     {
         target.TakeDamage(damage);
-        Debug.Log(unitName + " attacked for " + damage + " damage!" );
+        ChangeMana(5);
+        //Debug.Log(unitName + " attacked for " + damage + " damage!" );
 
         // ✨ Fire event
         OnAttackPerformed?.Invoke();
@@ -100,6 +150,7 @@ public class IFighter : MonoBehaviour
     public virtual void CastSpell(Spell spell, IFighter target){
         if(_currentMana >= spell.manaCost){
             _currentMana -= spell.manaCost;
+            Debug.Log("Casted the spell : " + spell.name);
             spell.ApplyEffect(this,target);
         }
         
@@ -108,11 +159,11 @@ public class IFighter : MonoBehaviour
     public void ChangeMana(int amount)
     {
         _currentMana += amount;
-        Debug.Log(unitName + " mana changed by " + amount + "! New mana: " + _currentMana);
+        //Debug.Log(unitName + " mana changed by " + amount + "! New mana: " + _currentMana);
 
         // ✨ Fire event
         OnManaChanged?.Invoke(_currentMana);
-        if(_currentMana >= fighterSpell.manaCost){
+        if(fighterSpell!=null &&  _currentMana >= fighterSpell.manaCost){
             CastSpell(fighterSpell,currentTarget);
         }
 
@@ -143,6 +194,22 @@ public class IFighter : MonoBehaviour
         
     }
 
+    public void TickStatusEffects(){
+        for(int i = activeEffects.Count -1; i>= 0; i--){
+            StatusEffect effect = activeEffects[i];
+            effect.OnTimer(this);
+            effect.duration--;
+            if(effect.duration<= 0){
+                effect.OnExpire(this);
+                activeEffects.RemoveAt(i);
+            }
+        }
+    }
+
+
+    public void MoveToward(Vector3 targetPosition){
+        transform.position = Vector3.MoveTowards(transform.position,targetPosition,movementSpeed*Time.deltaTime);
+    }
 
     //EZ access from other scripts
     public int GetCurrentLife() => _currentLife;
@@ -153,6 +220,8 @@ public class IFighter : MonoBehaviour
     public void Start()
     {
         _currentLife = life;
+
+        
     }
 
 

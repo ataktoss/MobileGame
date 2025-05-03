@@ -27,7 +27,7 @@ public class HealOnDamagePassive : Passive
         fighterLife = fighter._currentLife;
         
         if(fighterLife<50){
-            fighter.Heal(40);
+            fighter.Heal(5);
         }
     }
     public override void ApplyEffect(IFighter fighter)

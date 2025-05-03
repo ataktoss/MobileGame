@@ -14,8 +14,14 @@ public class BurnEffect : StatusEffect
         Debug.Log(target.unitName + " Is now burning");
     }
 
-    
+    public override void OnTimer(IFighter target)
+    {
+        target.TakeDamage(damagePerTurn);
+    }
 
-
+    public override void OnExpire(IFighter target)
+    {
+        Debug.Log(target.name + "Is no longer burning");
+    }
 
 }
