@@ -21,7 +21,7 @@ public class DebuffTest : MonoBehaviour,IEffect
     }
     
     public void Apply(IFighter caster,IFighter target ){
-        target.ApplyDebuff(new SlowEffect(10,5,1));
+        target.ApplyDebuff(new CurseEffect(1.25f,5,1));
         
         
     }

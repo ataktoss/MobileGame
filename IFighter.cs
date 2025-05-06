@@ -21,16 +21,21 @@ public class IFighter : MonoBehaviour
     public bool melee;
     public bool isAlive = true;
     public bool isAttacking = false;
+    public bool isFrozen = false;
+    public bool isSilenced = false;
     public Spell fighterSpell;
     public IFighter currentTarget;
     public List<Passive> passives = new List<Passive>();
     public List<StatusEffect> activeEffects = new List<StatusEffect>();
-    
+    public List<Func<int, int>> damageModifiers = new List<Func<int, int>>();
+    public List<Func<int, int>> outgoingDamageModifiers = new List<Func<int, int>>();
+
+
     //Events
     public event Action<int> OnHealthChanged;
     public event Action<int> OnManaChanged;
     public event Action OnAttackPerformed;
-    public event Action OnTakeDamage;
+    public event Action<int> OnTakeDamage;
 
     
 
@@ -42,14 +47,17 @@ public class IFighter : MonoBehaviour
     public void TakeDamage(int amount){
 
         if(this.gameObject != null){
-            _currentLife -= amount;
+            
+        foreach(var mod in damageModifiers)    {
+            amount = mod.Invoke(amount);
+        }
+            
+         _currentLife -= amount;
         //Debug.Log(unitName + " took " + amount + " damage!" + "Now life is : " + _currentLife);
-
-       
 
         // ✨ Fire events
         OnHealthChanged?.Invoke(_currentLife);
-        OnTakeDamage?.Invoke();
+        OnTakeDamage?.Invoke(amount);
 
         foreach (var passive in passives)
         {
@@ -62,12 +70,7 @@ public class IFighter : MonoBehaviour
             this.enabled=false;
             Destroy(this.gameObject);
         }
-
-
         }
-        
-        
-
     }
 
     public void Die()
@@ -131,7 +134,13 @@ public class IFighter : MonoBehaviour
 
     public void Attack(IFighter target, int damage)
     {
-        target.TakeDamage(damage);
+        if(isFrozen) return;
+        int finalDamage = damage;
+        foreach(var mod in outgoingDamageModifiers){
+            finalDamage = mod(finalDamage);
+        }
+
+        target.TakeDamage(finalDamage);
         ChangeMana(5);
         //Debug.Log(unitName + " attacked for " + damage + " damage!" );
 
@@ -150,6 +159,8 @@ public class IFighter : MonoBehaviour
     }
 
     public virtual void CastSpell(Spell spell, IFighter target){
+        if(isFrozen) return;
+        if(isSilenced) return;
         if(_currentMana >= spell.manaCost){
             _currentMana -= spell.manaCost;
             
@@ -161,6 +172,7 @@ public class IFighter : MonoBehaviour
 
     public void ChangeMana(int amount)
     {
+        if(isSilenced) return;
         _currentMana += amount;
         Debug.Log(this.name + " mana changed by " + amount + "! New mana: " + _currentMana);
 
@@ -211,6 +223,7 @@ public class IFighter : MonoBehaviour
 
 
     public void MoveToward(Vector3 targetPosition){
+        if(isFrozen) return;
         transform.position = Vector3.MoveTowards(transform.position,targetPosition,movementSpeed*Time.deltaTime);
     }
 

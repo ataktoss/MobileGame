@@ -18,7 +18,11 @@ public class Spell
 
 
     public virtual void ApplyEffect(IFighter caster,IFighter target){
-        target.TakeDamage(damage);
+        int finalDamage = damage;
+        foreach(var weaken in target.outgoingDamageModifiers){
+            finalDamage = weaken(finalDamage);
+        }
+        target.TakeDamage(finalDamage);
         Debug.Log(target.name + " Took " + damage + "Damage");
 
         foreach(var effect in additionalEffects){
