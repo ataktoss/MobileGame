@@ -165,7 +165,7 @@ public class IFighter : MonoBehaviour
             _currentMana -= spell.manaCost;
             
             spell.ApplyEffect(this,target);
-            Debug.Log(this.name + "Casted the spell : " + spell.name + " Now mana is : " + _currentMana);
+            //Debug.Log(this.name + "Casted the spell : " + spell.name + " Now mana is : " + _currentMana);
         }
         
     }
@@ -174,7 +174,7 @@ public class IFighter : MonoBehaviour
     {
         if(isSilenced) return;
         _currentMana += amount;
-        Debug.Log(this.name + " mana changed by " + amount + "! New mana: " + _currentMana);
+        //Debug.Log(this.name + " mana changed by " + amount + "! New mana: " + _currentMana);
 
         // ✨ Fire event
         OnManaChanged?.Invoke(_currentMana);
@@ -198,6 +198,7 @@ public class IFighter : MonoBehaviour
         passives.Add(newPassive);
         
         Debug.Log($"{unitName} gained passive: {newPassive.passiveName}");
+        Debug.Log("Attack speed is now : " + attackSpeed);
     }
 
     public void ApplyDebuff(StatusEffect effect){
