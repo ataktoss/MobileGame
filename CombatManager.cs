@@ -8,14 +8,12 @@ public class CombatManager : MonoBehaviour
     public List<IFighter> heroes = new List<IFighter>();
     public List<IFighter> monsters = new List<IFighter>();
     
+    public static CombatManager Instance {get; private set;}
     
     private float timer = 0f;
     
     
-    void Start()
-    {
-        StartCoroutine(UpdateCombatLoop());
-    }
+    
 
     IEnumerator<System.Object> UpdateCombatLoop(){
         while(true){
@@ -29,7 +27,7 @@ public class CombatManager : MonoBehaviour
                 HandleCombatAI(monster,heroes);
                 monster.TickStatusEffects();
             }
-            yield return new WaitForSeconds(0.2f); //Update Combat timer
+            yield return new WaitForSeconds(0.1f); //Update Combat timer
         }
     }
 
@@ -79,12 +77,34 @@ public class CombatManager : MonoBehaviour
 
     }
 
+    void Awake()
+    {
+        if(Instance != null && Instance != this){
+            Destroy(this.gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
+    void Start()
+    {
+        StartCoroutine(UpdateCombatLoop());
+    }
 
     // Update is called once per frame
     void Update()
     {
         timer += Time.deltaTime;
 
-        //if(timer>= )
+        
     }
+
+    public List<IFighter> GetHeroList(){
+        return heroes;
+    }
+    public List<IFighter> MonsterList(){
+        return monsters;
+    }
+
+
 }

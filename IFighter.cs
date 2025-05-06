@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class IFighter : MonoBehaviour
@@ -15,6 +16,7 @@ public class IFighter : MonoBehaviour
     public float movementSpeed= 5f;
     public int attackDamage;
     private int _currentMana = 0;
+    private float lastEffectTick;
     
     public bool melee;
     public bool isAlive = true;
@@ -150,8 +152,9 @@ public class IFighter : MonoBehaviour
     public virtual void CastSpell(Spell spell, IFighter target){
         if(_currentMana >= spell.manaCost){
             _currentMana -= spell.manaCost;
-            Debug.Log("Casted the spell : " + spell.name);
+            
             spell.ApplyEffect(this,target);
+            Debug.Log(this.name + "Casted the spell : " + spell.name + " Now mana is : " + _currentMana);
         }
         
     }
@@ -159,7 +162,7 @@ public class IFighter : MonoBehaviour
     public void ChangeMana(int amount)
     {
         _currentMana += amount;
-        //Debug.Log(unitName + " mana changed by " + amount + "! New mana: " + _currentMana);
+        Debug.Log(this.name + " mana changed by " + amount + "! New mana: " + _currentMana);
 
         // ✨ Fire event
         OnManaChanged?.Invoke(_currentMana);
@@ -188,6 +191,7 @@ public class IFighter : MonoBehaviour
     public void ApplyDebuff(StatusEffect effect){
         activeEffects.Add(effect);
         effect.OnAPply(this);
+        
     }
 
     public void ProcessStatusEffects(){
@@ -197,8 +201,7 @@ public class IFighter : MonoBehaviour
     public void TickStatusEffects(){
         for(int i = activeEffects.Count -1; i>= 0; i--){
             StatusEffect effect = activeEffects[i];
-            effect.OnTimer(this);
-            effect.duration--;
+            effect.TryTick(this);
             if(effect.duration<= 0){
                 effect.OnExpire(this);
                 activeEffects.RemoveAt(i);

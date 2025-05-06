@@ -17,7 +17,7 @@ public class Spell
     }
 
 
-    public void ApplyEffect(IFighter caster,IFighter target){
+    public virtual void ApplyEffect(IFighter caster,IFighter target){
         target.TakeDamage(damage);
         Debug.Log(target.name + " Took " + damage + "Damage");
 
@@ -27,10 +27,4 @@ public class Spell
 
 
     }
-
-
-
-
-
-    
 }

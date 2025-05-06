@@ -5,7 +5,7 @@ public class BurnEffect : StatusEffect
     
     public int damagePerTurn;
 
-    public BurnEffect(int damagePerTurn, int duration): base("Burn",duration){
+    public BurnEffect(int damagePerTurn, int duration,int howOften): base("Burn",duration,howOften){
         this.damagePerTurn = damagePerTurn;
     }
 
@@ -17,6 +17,7 @@ public class BurnEffect : StatusEffect
     public override void OnTimer(IFighter target)
     {
         target.TakeDamage(damagePerTurn);
+        Debug.Log(target.name + " Took " + damagePerTurn + " from ignite");
     }
 
     public override void OnExpire(IFighter target)

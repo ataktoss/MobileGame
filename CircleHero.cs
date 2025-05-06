@@ -9,7 +9,8 @@ public class CircleHero: IFighter
 
     void Awake()
     {
-        fighterSpell = new FireBall("fireball",50,10);
+        //fighterSpell = new FireBall("fireball",50,10);
+        fighterSpell = new HealLowest("Serenity",25,50);
 
     }
 
