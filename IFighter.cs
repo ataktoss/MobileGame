@@ -15,6 +15,8 @@ public class IFighter : MonoBehaviour
     public int attackRange;
     public float movementSpeed= 5f;
     public int attackDamage;
+    public int spellPower =0;
+    public int numberOfAttacks = 0;
     private int _currentMana = 0;
     private float lastEffectTick;
     
@@ -23,6 +25,7 @@ public class IFighter : MonoBehaviour
     public bool isAttacking = false;
     public bool isFrozen = false;
     public bool isSilenced = false;
+    private bool _isProcessingManaChange = false;
     public Spell fighterSpell;
     public IFighter currentTarget;
     public List<Passive> passives = new List<Passive>();
@@ -36,6 +39,7 @@ public class IFighter : MonoBehaviour
     public event Action<int> OnManaChanged;
     public event Action OnAttackPerformed;
     public event Action<int> OnTakeDamage;
+    public event Action<int> OnSpellCast;
 
     
 
@@ -161,27 +165,25 @@ public class IFighter : MonoBehaviour
     public virtual void CastSpell(Spell spell, IFighter target){
         if(isFrozen) return;
         if(isSilenced) return;
-        if(_currentMana >= spell.manaCost){
-            _currentMana -= spell.manaCost;
-            
-            spell.ApplyEffect(this,target);
-            //Debug.Log(this.name + "Casted the spell : " + spell.name + " Now mana is : " + _currentMana);
-        }
-        
+          
+        spell.ApplyEffect(this,target,spellPower);
+        OnSpellCast?.Invoke(spell.manaCost);    
     }
 
     public void ChangeMana(int amount)
     {
-        if(isSilenced) return;
+        if(isSilenced || _isProcessingManaChange) return;
+        _isProcessingManaChange = true;
         _currentMana += amount;
         //Debug.Log(this.name + " mana changed by " + amount + "! New mana: " + _currentMana);
 
-        // ✨ Fire event
+        // Mana Event
         OnManaChanged?.Invoke(_currentMana);
         if(fighterSpell!=null &&  _currentMana >= fighterSpell.manaCost){
+            _currentMana -= fighterSpell.manaCost;
             CastSpell(fighterSpell,currentTarget);
         }
-
+        _isProcessingManaChange  = false;
 
     }
 
@@ -201,6 +203,7 @@ public class IFighter : MonoBehaviour
         Debug.Log("Attack speed is now : " + attackSpeed);
     }
 
+    // BUFFS KAI DEBUFFS HERE
     public void ApplyDebuff(StatusEffect effect){
         activeEffects.Add(effect);
         effect.OnAPply(this);
@@ -221,6 +224,37 @@ public class IFighter : MonoBehaviour
             }
         }
     }
+
+    // public void RemoveBuff(System.Type effectType){
+    //     for(int i = activeEffects.Count-1; i>=0; i--){
+    //         StatusEffect activeEffect = activeEffects[i];
+    //         if(activeEffect.GetType()==effectType){
+    //             activeEffect.OnExpire(this);
+    //             activeEffects.RemoveAt(i);
+    //             break;
+    //         }
+    //     }
+    // }
+    //BUFFS AND DEBUFFS ARE ONE
+    public void RemoveBuff<T>() where T : StatusEffect
+    {
+        for (int i = activeEffects.Count - 1; i >= 0; i--)
+        {
+            if (activeEffects[i] is T)
+            {
+                activeEffects[i].OnExpire(this);
+                activeEffects.RemoveAt(i);
+                break;
+            }
+        }
+    }
+
+    public void enableAllPassives(){
+        for(int i = passives.Count -1; i>=0; i--){
+            passives[i].ApplyEffect(this);
+        }
+    }
+
 
 
     public void MoveToward(Vector3 targetPosition){

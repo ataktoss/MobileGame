@@ -5,7 +5,7 @@ public class BurnEffect : StatusEffect
     
     public int damagePerTurn;
 
-    public BurnEffect(int damagePerTurn, int duration,int howOften): base("Burn",duration,howOften){
+    public BurnEffect(int damagePerTurn, int duration,int howOften): base("Burn",duration,howOften,StatusEffectType.Debuff){
         this.damagePerTurn = damagePerTurn;
     }
 

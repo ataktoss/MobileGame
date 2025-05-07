@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SilenceEffect : StatusEffect
 {
-    public SilenceEffect(int duration,int howOften): base("Silence",duration,howOften){
+    public SilenceEffect(int duration,int howOften): base("Silence",duration,howOften,StatusEffectType.Debuff){
         
     }
 

@@ -20,7 +20,7 @@ public class AdrenalineRush : Passive,IEffect
         if(fighter._currentLife>= fighter.life/2){
             
             if(hasBuff){
-                fighter.activeEffects.RemoveAll(e => e is AdrenalineRushBuff);
+                fighter.RemoveBuff<AdrenalineRushBuff>();
                 
             }
             

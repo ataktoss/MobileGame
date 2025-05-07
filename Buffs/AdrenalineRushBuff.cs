@@ -4,7 +4,7 @@ public class AdrenalineRushBuff : StatusEffect
 {
     public float attackSpeedModifier;
 
-    public AdrenalineRushBuff(float attackSpeedBoost, int duration, int howOften): base("AttackSpeedBoost",duration,howOften){
+    public AdrenalineRushBuff(float attackSpeedBoost, int duration, int howOften): base("AttackSpeedBoost",duration,howOften,StatusEffectType.Buff){
         this.attackSpeedModifier = attackSpeedBoost;
     }
 

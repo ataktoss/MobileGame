@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FreezeEffect: StatusEffect
 {
-    public FreezeEffect(int duration,int howOften): base("Burn",duration,howOften){
+    public FreezeEffect(int duration,int howOften): base("Burn",duration,howOften,StatusEffectType.Debuff){
         
     }
 

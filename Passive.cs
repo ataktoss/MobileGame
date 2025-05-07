@@ -12,11 +12,13 @@ public abstract class Passive
         description = desc;
     }
     
+    //Use to apply permanent buffs/debuffs ktlp Should trigger once per fight
     public abstract void ApplyEffect(IFighter fighter);
 
 
     public virtual void OnTakeDamage(IFighter fighter, int damage) {}
     public virtual void OnAttack(IFighter fighter, IFighter target, int damage) {}
 
+    public virtual void OnSpellCast(IFighter fighter, int manaCost){}
     
 }

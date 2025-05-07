@@ -4,7 +4,7 @@ public class AttackSpeedBuff : StatusEffect
 {
     public int attackSpeedModifier;
 
-    public AttackSpeedBuff(int attackSpeedBoost, int duration, int howOften): base("AttackSpeedBoost",duration,howOften){
+    public AttackSpeedBuff(int attackSpeedBoost, int duration, int howOften): base("AttackSpeedBoost",duration,howOften,StatusEffectType.Buff){
         this.attackSpeedModifier = attackSpeedBoost;
     }
 

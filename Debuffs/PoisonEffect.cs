@@ -4,7 +4,7 @@ public class PoisonEffect : StatusEffect
 {
     public int damagePerTurn;
 
-    public PoisonEffect(int damagePerTurn, int duration,int howOften): base("Poison",duration,howOften){
+    public PoisonEffect(int damagePerTurn, int duration,int howOften): base("Poison",duration,howOften,StatusEffectType.Debuff){
         this.damagePerTurn = damagePerTurn;
     }
 

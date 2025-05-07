@@ -6,7 +6,7 @@ public class WeakenEffect : StatusEffect
     public float weakenAmount;
     private Func<int, int> damageModifier;
 
-    public WeakenEffect(float weakenAmount,int duration,int howOften): base("Weaken",duration,howOften){
+    public WeakenEffect(float weakenAmount,int duration,int howOften): base("Weaken",duration,howOften,StatusEffectType.Debuff){
         this.weakenAmount = weakenAmount;
     }
 

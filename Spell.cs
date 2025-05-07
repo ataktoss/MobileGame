@@ -17,8 +17,8 @@ public class Spell
     }
 
 
-    public virtual void ApplyEffect(IFighter caster,IFighter target){
-        int finalDamage = damage;
+    public virtual void ApplyEffect(IFighter caster,IFighter target,float spellPower){
+        int finalDamage = (int)(damage*(1+spellPower));
         foreach(var weaken in target.outgoingDamageModifiers){
             finalDamage = weaken(finalDamage);
         }

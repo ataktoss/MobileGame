@@ -5,7 +5,7 @@ public class RenewBuff : StatusEffect
 
     public int healPerTurn;
 
-    public RenewBuff(int healPerTurn, int duration, int howOften): base("Renew",duration,howOften){
+    public RenewBuff(int healPerTurn, int duration, int howOften): base("Renew",duration,howOften,StatusEffectType.Buff){
         this.healPerTurn = healPerTurn;
     }
 

@@ -7,7 +7,7 @@ public class SlowEffect : StatusEffect
     public float savedSpeed;
     public float slowAmount;
 
-    public SlowEffect(int damagePerTurn, int duration,int howOften): base("Poison",duration,howOften){
+    public SlowEffect(int damagePerTurn, int duration,int howOften): base("Poison",duration,howOften,StatusEffectType.Debuff){
         //this.damagePerTurn = damagePerTurn;
     }
 

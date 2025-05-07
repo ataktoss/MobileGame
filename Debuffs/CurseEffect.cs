@@ -7,7 +7,7 @@ public class CurseEffect : StatusEffect
     public float curseAmount;
     private Func<int, int> damageModifier;
 
-    public CurseEffect(float curseAmount,int duration,int howOften): base("Curse",duration,howOften){
+    public CurseEffect(float curseAmount,int duration,int howOften): base("Curse",duration,howOften,StatusEffectType.Debuff){
         this.curseAmount = curseAmount;
     }
 
