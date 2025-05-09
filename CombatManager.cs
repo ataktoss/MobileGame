@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class CombatManager : MonoBehaviour
 {
     
@@ -88,7 +89,7 @@ public class CombatManager : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(UpdateCombatLoop());
+        //StartCoroutine(UpdateCombatLoop());
     }
 
     // Update is called once per frame
@@ -97,6 +98,10 @@ public class CombatManager : MonoBehaviour
         timer += Time.deltaTime;
 
         
+    }
+
+    public void StartCombat(){
+        StartCoroutine(UpdateCombatLoop());
     }
 
     public List<IFighter> GetHeroList(){

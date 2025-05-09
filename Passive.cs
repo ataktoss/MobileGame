@@ -20,5 +20,5 @@ public abstract class Passive
     public virtual void OnAttack(IFighter fighter, IFighter target, int damage) {}
 
     public virtual void OnSpellCast(IFighter fighter, int manaCost){}
-    
+    public virtual void OnDeath(IFighter fighter){}
 }

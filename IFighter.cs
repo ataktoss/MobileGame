@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -17,7 +18,14 @@ public class IFighter : MonoBehaviour
     public int attackDamage;
     public int spellPower =0;
     public int numberOfAttacks = 0;
-    private int _currentMana = 0;
+    public int _currentMana = 0;
+
+    //STATS AFTER ITEM APPLICATIONS
+    public float TotalAttackSpeed => attackSpeed + equipedItems.Sum(item => item.bonusAttackSpeed);
+    public int TotalSpellPower => spellPower + equipedItems.Sum(item => item.bonusSpellPower);
+    public int TotalLife => life + equipedItems.Sum(item => item.bonusLife);
+
+
     private float lastEffectTick;
     
     public bool melee;
@@ -30,8 +38,11 @@ public class IFighter : MonoBehaviour
     public IFighter currentTarget;
     public List<Passive> passives = new List<Passive>();
     public List<StatusEffect> activeEffects = new List<StatusEffect>();
+    //DAMAGE TAKEN MODIFIER
     public List<Func<int, int>> damageModifiers = new List<Func<int, int>>();
+    //DAMAGE DONE MODIFIER
     public List<Func<int, int>> outgoingDamageModifiers = new List<Func<int, int>>();
+    public List<Item> equipedItems = new List<Item>();
 
 
     //Events
@@ -40,6 +51,7 @@ public class IFighter : MonoBehaviour
     public event Action OnAttackPerformed;
     public event Action<int> OnTakeDamage;
     public event Action<int> OnSpellCast;
+    public event Action OnDeath;
 
     
 
@@ -68,6 +80,7 @@ public class IFighter : MonoBehaviour
             passive.OnTakeDamage(this, amount); // <- tell passives
         }
         if(_currentLife <= 0){
+            OnDeath?.Invoke();
             isAlive = false;
             isAttacking = false;
             StopAllCoroutines();
@@ -124,7 +137,7 @@ public class IFighter : MonoBehaviour
 
     private IEnumerator AttackRoutine(){
         while(isAttacking){
-            yield return new WaitForSeconds(attackSpeed);
+            yield return new WaitForSeconds(TotalAttackSpeed);
             if(currentTarget != null){
                 Attack(currentTarget,attackDamage);
             }
@@ -255,6 +268,13 @@ public class IFighter : MonoBehaviour
         }
     }
 
+    public void EquipItem(Item item){
+        equipedItems.Add(item);
+    }
+    public void UnequipItem(Item item){
+        equipedItems.Remove(item);
+    }
+
 
 
     public void MoveToward(Vector3 targetPosition){
@@ -267,6 +287,9 @@ public class IFighter : MonoBehaviour
     public int GetCurrentMana() => _currentMana;
 
 
+    public void prepareForCombat(){
+        _currentLife = life;
+    }
 
     public void Start()
     {
