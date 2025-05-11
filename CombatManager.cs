@@ -8,10 +8,21 @@ public class CombatManager : MonoBehaviour
     
     public List<IFighter> heroes = new List<IFighter>();
     public List<IFighter> monsters = new List<IFighter>();
-    
+    public List<Transform> enemySpawnPoints; 
+    public List<Transform> heroSpawnPoints; 
     public static CombatManager Instance {get; private set;}
     
     private float timer = 0f;
+
+    private EncounterGroupSO currentEncounter;
+    public EncounterGroupSO CurrentEncounter{
+        get=>currentEncounter;
+        set{
+            currentEncounter = value;
+            //DO STUFF LIKE PREPARE COMBAT HERE
+        }
+    }
+
     
     
     
@@ -25,8 +36,10 @@ public class CombatManager : MonoBehaviour
                 fighter.TickStatusEffects();
             }
             foreach(var monster in monsters){
-                HandleCombatAI(monster,heroes);
-                monster.TickStatusEffects();
+                if(monster != null){
+                    HandleCombatAI(monster,heroes);
+                    monster.TickStatusEffects();
+                }
             }
             yield return new WaitForSeconds(0.1f); //Update Combat timer
         }
@@ -78,6 +91,26 @@ public class CombatManager : MonoBehaviour
 
     }
 
+    public void AsignEnemies(){
+        for(int i=0; i<currentEncounter.enemyPrefabs.Count && i<enemySpawnPoints.Count; i++){
+            GameObject prefab = currentEncounter.enemyPrefabs[i];
+            Transform spawnPoint = enemySpawnPoints[i];
+            GameObject instance = Instantiate(prefab,spawnPoint.position,spawnPoint.rotation);
+            instance.transform.SetParent(spawnPoint);
+
+            IFighter fighterRef = instance.GetComponent<IFighter>();
+            if(fighterRef != null){
+                monsters.Add(fighterRef);
+                Debug.Log("Added " + fighterRef.name + " to enemy List");
+            }
+
+
+
+        }
+    }
+
+
+
     void Awake()
     {
         if(Instance != null && Instance != this){
@@ -87,12 +120,7 @@ public class CombatManager : MonoBehaviour
         Instance = this;
     }
 
-    void Start()
-    {
-        //StartCoroutine(UpdateCombatLoop());
-    }
-
-    // Update is called once per frame
+    
     void Update()
     {
         timer += Time.deltaTime;

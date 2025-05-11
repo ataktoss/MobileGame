@@ -7,6 +7,11 @@ public class MapUIManager : MonoBehaviour
     
     public List<MapNodeUI> allNodes;
     public int finalLayerIndex = 2;
+    public BiomeEncounterPoolSO currentBiomePool;
+
+    // GIA TESTING SIGOURO ENCOUNTER STO COMBAT
+    public EncounterGroupSO readyEncounter;
+
     private float bottomY;
     void Start()
     {
@@ -17,11 +22,41 @@ public class MapUIManager : MonoBehaviour
         {
             bool isBottom = Mathf.Approximately(node.transform.position.y , bottomY);
             node.AssignRandomType(isFinalLayer: isBottom);
-            
+            AssignEncountersToCombatNodes();
             
             
         }
     }
+
+    void AssignEncountersToCombatNodes(){
+        foreach(var node in allNodes){
+            switch(node.nodeType){
+                case MapNodeUI.NodeType.Combat:
+                    node.assignedEncounter = GetRandomFrom(currentBiomePool.normalEncounters);
+                    //node.assignedEncounter = readyEncounter;
+                    break;
+                case MapNodeUI.NodeType.Elite:
+                    node.assignedEncounter = GetRandomFrom(currentBiomePool.eliteEncounters);
+                    break;
+                case MapNodeUI.NodeType.Boss:
+                    node.assignedEncounter = GetRandomFrom(currentBiomePool.bossEncounters);
+                    break;
+
+
+
+
+
+
+
+            }
+        }
+    }
+
+    EncounterGroupSO GetRandomFrom(List<EncounterGroupSO> list){
+        return list.Count ==0?null: list[Random.Range(0,list.Count)];
+    }
+
+
 
     private float GetBottomY()
     {

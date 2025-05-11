@@ -9,6 +9,8 @@ public class EncounterGroupSO : ScriptableObject
 
     [Tooltip("List of enemy prefab references")]
     public List<GameObject> enemyPrefabs;
+    
+
 }
 
 public enum EncounterType

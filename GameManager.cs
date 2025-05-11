@@ -18,6 +18,26 @@ public class GameManager : MonoBehaviour
         
     }
 
+    public void StartCombat(){
+
+    }
+    public void CombatEnd(){
+
+    }
+
+    public void OpenShop(){
+
+    }
+
+    public void ShopClose(){
+
+    }
+
+    
+
+
+
+
 
 
 }

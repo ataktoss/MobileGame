@@ -38,8 +38,10 @@ public class RotBurst : Passive, IEffect
     public override void OnDeath(IFighter fighter)
     {
         foreach(IFighter aliveHero in CombatManager.Instance.GetHeroList()){
+            Debug.Log("Got HERO LIST READY TO EXPLODE");
             if(aliveHero.isAlive){
                 aliveHero.TakeDamage(explodeAmount);
+                Debug.Log("Exploded on : " + aliveHero.name + " For damage : " + explodeAmount);
             }
             
         }

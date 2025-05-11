@@ -19,6 +19,8 @@ public class IFighter : MonoBehaviour
     public int spellPower =0;
     public int numberOfAttacks = 0;
     public int _currentMana = 0;
+    public int critChance;
+    public int critDamage = 200;
 
     //STATS AFTER ITEM APPLICATIONS
     public float TotalAttackSpeed => attackSpeed + equipedItems.Sum(item => item.bonusAttackSpeed);
@@ -67,8 +69,9 @@ public class IFighter : MonoBehaviour
         foreach(var mod in damageModifiers)    {
             amount = mod.Invoke(amount);
         }
-            
+        Debug.Log("I AM TAKING DAMAGE CURRENT LIFE : " + _currentLife);
          _currentLife -= amount;
+        Debug.Log("NOW MY LIFE IS : " + _currentLife);
         //Debug.Log(unitName + " took " + amount + " damage!" + "Now life is : " + _currentLife);
 
         // ✨ Fire events
@@ -81,6 +84,10 @@ public class IFighter : MonoBehaviour
         }
         if(_currentLife <= 0){
             OnDeath?.Invoke();
+            foreach (var passive in passives)
+            {
+                passive.OnDeath(this); // <- tell passives
+            }
             isAlive = false;
             isAttacking = false;
             StopAllCoroutines();

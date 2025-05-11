@@ -16,6 +16,8 @@ public class MapNodeUI : MonoBehaviour
 
     [Header("Assigned at runtime")]
     public NodeType nodeType;
+
+    public EncounterGroupSO assignedEncounter;
     
 
     [Header("Node Connections")]
@@ -39,16 +41,16 @@ public class MapNodeUI : MonoBehaviour
             float roll = UnityEngine.Random.value;
             if(roll<0.15f){
                 nodeType = NodeType.Shop;
-                Debug.Log("This is Shop now");
+                //Debug.Log("This is Shop now");
                 
             }
             else if(roll < 0.30f){
                 nodeType = NodeType.Elite;
-                Debug.Log("This is Elite now");
+                //Debug.Log("This is Elite now");
             }
             else{
                 nodeType = NodeType.Combat;
-                Debug.Log("This is Combat now");
+                //Debug.Log("This is Combat now");
             }
         }
 
@@ -73,6 +75,26 @@ public class MapNodeUI : MonoBehaviour
             case NodeType.Boss: icon.color = bossColor; break;
         }
     }
+
+    public void OnClick(){
+        Debug.Log("Clicked the button");
+        //if(assignedEncounter != null){
+            //Debug.Log($"Entering {nodeType} encounter: {assignedEncounter.groupID}");
+
+            //
+            if(nodeType == NodeType.Shop){
+                //DO SHOP STUFF
+            }
+
+
+            //NEED TO ASIGN ENEMIES AND HEROES
+            CombatManager.Instance.CurrentEncounter = assignedEncounter;
+            CombatManager.Instance.AsignEnemies();
+            CombatManager.Instance.StartCombat();
+        //}
+    }
+
+
 
 
 }
