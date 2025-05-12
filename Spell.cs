@@ -28,7 +28,5 @@ public class Spell
         foreach(var effect in additionalEffects){
             effect.Apply(caster,target);
         }
-
-
     }
 }

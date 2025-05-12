@@ -21,7 +21,8 @@ public class PoisonHits : Passive, IEffect
 
     public override void OnAttack(IFighter fighter, IFighter target, int damage)
     {
-        target.ApplyDebuff(new PoisonEffect(poisonDamage,2,1));
+        int theDamage = fighter.attackDamage;
+        target.ApplyDebuff(new PoisonEffect(theDamage,2,1));
     }
 
 }

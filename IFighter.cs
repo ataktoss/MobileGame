@@ -19,8 +19,9 @@ public class IFighter : MonoBehaviour
     public int spellPower =0;
     public int numberOfAttacks = 0;
     public int _currentMana = 0;
-    public int critChance;
-    public int critDamage = 200;
+    public float critChance = 5f;
+    public float critDamage = 2f;
+    public int manaGainedFromHits = 5;
 
     //STATS AFTER ITEM APPLICATIONS
     public float TotalAttackSpeed => attackSpeed + equipedItems.Sum(item => item.bonusAttackSpeed);
@@ -53,6 +54,7 @@ public class IFighter : MonoBehaviour
     public event Action OnAttackPerformed;
     public event Action<int> OnTakeDamage;
     public event Action<int> OnSpellCast;
+    //public event Action<int> OnCrit;
     public event Action OnDeath;
 
     
@@ -159,13 +161,17 @@ public class IFighter : MonoBehaviour
     public void Attack(IFighter target, int damage)
     {
         if(isFrozen) return;
+        bool isCrit = UnityEngine.Random.value < critChance;
         int finalDamage = damage;
+        if(isCrit){
+            finalDamage = (int)(damage*critDamage);
+        }
         foreach(var mod in outgoingDamageModifiers){
             finalDamage = mod(finalDamage);
         }
 
         target.TakeDamage(finalDamage);
-        ChangeMana(5);
+        ChangeMana(manaGainedFromHits);
         //Debug.Log(unitName + " attacked for " + damage + " damage!" );
 
         // ✨ Fire event

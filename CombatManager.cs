@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -107,6 +108,9 @@ public class CombatManager : MonoBehaviour
 
 
         }
+        if(currentEncounter.type == EncounterType.Normal){
+            Debug.Log("THE CURRENT ENCOUNTER IS OF NORMAL TYPE");
+        }
     }
 
 
@@ -131,11 +135,14 @@ public class CombatManager : MonoBehaviour
     public void StartCombat(){
         StartCoroutine(UpdateCombatLoop());
     }
+    public void EndCombat(){
+
+    }
 
     public List<IFighter> GetHeroList(){
         return heroes;
     }
-    public List<IFighter> MonsterList(){
+    public List<IFighter> GetMonsterList(){
         return monsters;
     }
 
