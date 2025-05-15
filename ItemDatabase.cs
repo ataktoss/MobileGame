@@ -26,12 +26,4 @@ public class ItemDatabase : ScriptableObject
         return result;
     }
 
-
-
-
-
-
-
-
-
 }

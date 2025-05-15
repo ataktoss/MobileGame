@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -81,6 +82,11 @@ public class GameManager : MonoBehaviour
         shopPanel.SetActive(false);
         rewardPanel.SetActive(false);
 
+    }
+
+    public void AddItemToInventory(ItemData item){
+        Debug.Log("The name of the item is : " + item.itemName);
+        //DO STUFF WITH ITEM HERE
     }
 
 

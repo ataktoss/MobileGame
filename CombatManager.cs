@@ -1,13 +1,15 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEngine;
 
 
 public class CombatManager : MonoBehaviour
 {
-    
-    
+
+    public List<GameObject> heroObjects = new();
     public List<IFighter> heroes = new List<IFighter>();
+
     public List<IFighter> monsters = new List<IFighter>();
     public List<Transform> enemySpawnPoints; 
     public List<Transform> heroSpawnPoints; 
@@ -102,14 +104,14 @@ public class CombatManager : MonoBehaviour
             IFighter fighterRef = instance.GetComponent<IFighter>();
             if(fighterRef != null){
                 monsters.Add(fighterRef);
-                Debug.Log("Added " + fighterRef.name + " to enemy List");
+                UnityEngine.Debug.Log("Added " + fighterRef.name + " to enemy List");
             }
 
 
 
         }
         if(currentEncounter.type == EncounterType.Normal){
-            Debug.Log("THE CURRENT ENCOUNTER IS OF NORMAL TYPE");
+            UnityEngine.Debug.Log("THE CURRENT ENCOUNTER IS OF NORMAL TYPE");
         }
     }
 
@@ -133,13 +135,24 @@ public class CombatManager : MonoBehaviour
     }
 
     public void StartCombat(){
+        foreach (var hero in heroObjects)
+        {
+            heroes.Add(hero.GetComponent<IFighter>());
+            
+        }
         StartCoroutine(UpdateCombatLoop());
     }
     public void EndCombat(){
 
     }
 
-    public List<IFighter> GetHeroList(){
+    public void AddHero(GameObject hero)
+    {
+        heroObjects.Add(hero);
+        UnityEngine.Debug.Log("Just added the Hero " + hero.name);
+    }
+    public List<IFighter> GetHeroList()
+    {
         return heroes;
     }
     public List<IFighter> GetMonsterList(){
