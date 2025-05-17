@@ -15,7 +15,11 @@ public class PoisonEffect : StatusEffect
 
     public override void OnTimer(IFighter target)
     {
-        target.TakeDamage(damagePerTurn);
+        if (target != null)
+        {
+            target.TakeDamage(damagePerTurn);    
+        }
+        
         //Debug.Log(target.name + " Took " + damagePerTurn + " from poison");
     }
 

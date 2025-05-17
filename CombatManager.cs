@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,15 +9,16 @@ public class CombatManager : MonoBehaviour
 {
 
     public List<GameObject> heroObjects = new();
+    //Use heroes for combat stuff
     public List<IFighter> heroes = new List<IFighter>();
-
+    
     public List<IFighter> monsters = new List<IFighter>();
     public List<Transform> enemySpawnPoints; 
     public List<Transform> heroSpawnPoints; 
     public static CombatManager Instance {get; private set;}
     
     private float timer = 0f;
-
+    private Coroutine combatLoop;
     private EncounterGroupSO currentEncounter;
     public EncounterGroupSO CurrentEncounter{
         get=>currentEncounter;
@@ -33,14 +35,23 @@ public class CombatManager : MonoBehaviour
     IEnumerator<System.Object> UpdateCombatLoop(){
         while(true){
             yield return null;
-
-            foreach(var fighter in heroes){
-                HandleCombatAI(fighter,monsters);
+            if (monsters.All(m => m == null))
+            {
+                EndCombat();
+                UnityEngine.Debug.Log("Ending combat from loop");
+                yield break;
+            }
+            
+            foreach (var fighter in heroes)
+            {
+                HandleCombatAI(fighter, monsters);
                 fighter.TickStatusEffects();
             }
             foreach(var monster in monsters){
-                if(monster != null){
-                    HandleCombatAI(monster,heroes);
+                
+                if (monster != null)
+                {
+                    HandleCombatAI(monster, heroes);
                     monster.TickStatusEffects();
                 }
             }
@@ -94,15 +105,19 @@ public class CombatManager : MonoBehaviour
 
     }
 
-    public void AsignEnemies(){
-        for(int i=0; i<currentEncounter.enemyPrefabs.Count && i<enemySpawnPoints.Count; i++){
+    public void AsignEnemiesAndHeroes()
+    {
+        //SET ENEMIES
+        for (int i = 0; i < currentEncounter.enemyPrefabs.Count && i < enemySpawnPoints.Count; i++)
+        {
             GameObject prefab = currentEncounter.enemyPrefabs[i];
             Transform spawnPoint = enemySpawnPoints[i];
-            GameObject instance = Instantiate(prefab,spawnPoint.position,spawnPoint.rotation);
+            GameObject instance = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation);
             instance.transform.SetParent(spawnPoint);
 
             IFighter fighterRef = instance.GetComponent<IFighter>();
-            if(fighterRef != null){
+            if (fighterRef != null)
+            {
                 monsters.Add(fighterRef);
                 UnityEngine.Debug.Log("Added " + fighterRef.name + " to enemy List");
             }
@@ -110,10 +125,31 @@ public class CombatManager : MonoBehaviour
 
 
         }
-        if(currentEncounter.type == EncounterType.Normal){
+        if (currentEncounter.type == EncounterType.Normal)
+        {
             UnityEngine.Debug.Log("THE CURRENT ENCOUNTER IS OF NORMAL TYPE");
         }
+        //SET HEROES
+        for (int i = 0; i < heroObjects.Count && i < heroSpawnPoints.Count; i++)
+        {
+            GameObject prefab = heroObjects[i];
+            Transform spawnPoint = heroSpawnPoints[i];
+            GameObject instance = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation);
+            instance.transform.SetParent(spawnPoint);
+
+            IFighter fighterRef = instance.GetComponent<IFighter>();
+            if (fighterRef != null)
+            {
+                heroes.Add(fighterRef);
+                UnityEngine.Debug.Log("Added " + fighterRef.name + " to enemy List");
+            }
+
+
+
+        }
     }
+
+    
 
 
 
@@ -135,14 +171,27 @@ public class CombatManager : MonoBehaviour
     }
 
     public void StartCombat(){
-        foreach (var hero in heroObjects)
-        {
-            heroes.Add(hero.GetComponent<IFighter>());
-            
-        }
-        StartCoroutine(UpdateCombatLoop());
+        // foreach (var hero in heroObjects)
+        // {
+        //     heroes.Add(hero.GetComponent<IFighter>());
+
+
+        // }
+        GameManager.Instance.ChangeState(GameManager.GameState.Combat);
+        combatLoop = StartCoroutine(UpdateCombatLoop());
     }
-    public void EndCombat(){
+    private void EndCombat()
+    {
+        UnityEngine.Debug.Log("END COMBAT FUNCTION HERE");
+        //StopCoroutine(combatLoop);
+        foreach (var hero in heroes)
+        {
+            
+            Destroy(hero.gameObject);
+        }
+        heroes.Clear();
+        monsters.Clear();
+        GameManager.Instance.ChangeState(GameManager.GameState.combatReward);
 
     }
 

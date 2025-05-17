@@ -12,6 +12,8 @@ public class MapUIManager : MonoBehaviour
     // GIA TESTING SIGOURO ENCOUNTER STO COMBAT
     public EncounterGroupSO readyEncounter;
 
+    public MapNodeUI currentNode;
+
     private float bottomY;
     void Start()
     {

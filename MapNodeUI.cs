@@ -89,7 +89,7 @@ public class MapNodeUI : MonoBehaviour
 
             //NEED TO ASIGN ENEMIES AND HEROES
             CombatManager.Instance.CurrentEncounter = assignedEncounter;
-            CombatManager.Instance.AsignEnemies();
+            CombatManager.Instance.AsignEnemiesAndHeroes();
             CombatManager.Instance.StartCombat();
         //}
     }

@@ -216,9 +216,19 @@ public class IFighter : MonoBehaviour
     public void CustomEffect(Action theMethod){
         theMethod();
     }
-    
-    public void Heal (int amount){
-        _currentLife += amount;
+
+    public void Heal(int amount)
+    {
+        if ((_currentLife + amount) > life)
+        {
+            _currentLife = life;
+        }
+        else
+        {
+            _currentLife += amount;
+        }
+        
+        
     }
 
     public void AddPassive(Passive newPassive)

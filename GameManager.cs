@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     //do not touch from another script
     public GameObject mapPanel,combatPanel,shopPanel,rewardPanel;
 
+    
 
 
 
@@ -48,23 +49,20 @@ public class GameManager : MonoBehaviour
 
     }
 
-
-
-
-
-
-
     public void SetupCombat(){
         mapPanel.SetActive(false);
-        combatPanel.SetActive(true);
-        shopPanel.SetActive(false);
-        rewardPanel.SetActive(false);
+        // combatPanel.SetActive(true);
+        // shopPanel.SetActive(false);
+        // rewardPanel.SetActive(false);
     }
-    public void combatReward(){
-        mapPanel.SetActive(false);
-        combatPanel.SetActive(false);
-        shopPanel.SetActive(false);
-        rewardPanel.SetActive(true);
+    public void combatReward()
+    {
+        // mapPanel.SetActive(false);
+        // combatPanel.SetActive(false);
+        // shopPanel.SetActive(false);
+        // rewardPanel.SetActive(true);
+        CombatRewards.Instance.choseReward();
+        Debug.Log("Generating reward buttons");
     }
 
     public void OpenShop(){
@@ -78,9 +76,9 @@ public class GameManager : MonoBehaviour
 
     public void ShowMap(){
         mapPanel.SetActive(true);
-        combatPanel.SetActive(false);
-        shopPanel.SetActive(false);
-        rewardPanel.SetActive(false);
+        // combatPanel.SetActive(false);
+        // shopPanel.SetActive(false);
+        // rewardPanel.SetActive(false);
 
     }
 
