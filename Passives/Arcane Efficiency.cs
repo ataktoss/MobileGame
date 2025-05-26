@@ -5,12 +5,12 @@ public class ArcaneEfficiency : Passive,IEffect
 
     public ArcaneEfficiency():base("Arcane Efficiency","Spells cost 20% less mana"){}
 
-    public void Apply(IFighter caster, IFighter target)
+    public void Apply(Fighter caster, Fighter target)
     {
         
     }
 
-    public override void ApplyEffect(IFighter fighter)
+    public override void ApplyEffect(Fighter fighter)
     {
         Debug.Log("Spells now cost 20% less mana");
         if(fighter.fighterSpell != null){

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Explodey : IFighter
+public class Explodey : Fighter
 {
     void Awake()
     {

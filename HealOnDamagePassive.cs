@@ -16,12 +16,12 @@ public class HealOnDamagePassive : Passive
     // public void OnTakeDamage(IFighter fighter, int damage){
 
     // }
-    public override void OnAttack(IFighter fighter, IFighter target, int damage){
+    public override void OnAttack(Fighter fighter, Fighter target, int damage){
         ApplyEffect(fighter);
     }
 
 
-    public override void OnTakeDamage(IFighter fighter, int damage)
+    public override void OnTakeDamage(Fighter fighter, int damage)
     {
         //base.OnTakeDamage(fighter, damage);
         fighterLife = fighter._currentLife;
@@ -30,7 +30,7 @@ public class HealOnDamagePassive : Passive
             fighter.Heal(5);
         }
     }
-    public override void ApplyEffect(IFighter fighter)
+    public override void ApplyEffect(Fighter fighter)
     {
         Debug.Log("This part worked");
         fighter.CustomEffect(()=>{

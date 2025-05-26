@@ -3,7 +3,7 @@ using UnityEngine;
 public interface IEffect
 {
 
-    void Apply(IFighter caster,IFighter target );
+    void Apply(Fighter caster,Fighter target );
 
     
 }

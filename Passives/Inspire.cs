@@ -4,12 +4,12 @@ public class Inspire: Passive
 {
     public Inspire():base("Inspire","Allies gain +10% attack speed"){}
 
-    public void Apply(IFighter caster, IFighter target)
+    public void Apply(Fighter caster, Fighter target)
     {
         
     }
 
-    public override void ApplyEffect(IFighter fighter)
+    public override void ApplyEffect(Fighter fighter)
     {
         foreach(var hero in CombatManager.Instance.GetHeroList()){
             if(hero != fighter){

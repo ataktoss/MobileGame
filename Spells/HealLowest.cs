@@ -9,9 +9,9 @@ public class HealLowest: Spell
     }
 
 
-    public override void ApplyEffect(IFighter caster,IFighter target,float spellPower){
-        List<IFighter> heroes =  CombatManager.Instance.GetHeroList();
-        IFighter lowestHealthHero = null;
+    public override void ApplyEffect(Fighter caster,Fighter target,float spellPower){
+        List<Fighter> heroes =  CombatManager.Instance.GetHeroList();
+        Fighter lowestHealthHero = null;
         int minHealth = int.MaxValue;
 
         foreach(var hero in CombatManager.Instance.GetHeroList()){

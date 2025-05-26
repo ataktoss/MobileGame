@@ -5,7 +5,7 @@ public class ChaosSurge : Passive,IEffect
     public ChaosSurge():base("Chaos Surge","+10% chance to cast spell twice"){}
 
 
-    public override void OnSpellCast(IFighter fighter, int manaCost)
+    public override void OnSpellCast(Fighter fighter, int manaCost)
     {
         
         if (Random.value < 0.10f) // 10% chance
@@ -14,12 +14,12 @@ public class ChaosSurge : Passive,IEffect
         }
     }
     
-    public void Apply(IFighter caster, IFighter target)
+    public void Apply(Fighter caster, Fighter target)
     {
         
     }
 
-    public override void ApplyEffect(IFighter fighter)
+    public override void ApplyEffect(Fighter fighter)
     {
         
     }

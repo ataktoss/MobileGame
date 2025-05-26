@@ -6,17 +6,17 @@ public class ArcaneFlow : Passive, IEffect
     {
     }
 
-    public void Apply(IFighter caster, IFighter target)
+    public void Apply(Fighter caster, Fighter target)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void ApplyEffect(IFighter fighter)
+    public override void ApplyEffect(Fighter fighter)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void OnAttack(IFighter fighter, IFighter target, int damage)
+    public override void OnAttack(Fighter fighter, Fighter target, int damage)
     {
         fighter.ChangeMana(5);
     }

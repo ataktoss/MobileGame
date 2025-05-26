@@ -11,19 +11,19 @@ public class SlowEffect : StatusEffect
         //this.damagePerTurn = damagePerTurn;
     }
 
-    public override void OnAPply(IFighter target)
+    public override void OnAPply(Fighter target)
     {
         savedSpeed = target.attackSpeed;
         target.attackSpeed  *= 2f;
     }
 
-    public override void OnTimer(IFighter target)
+    public override void OnTimer(Fighter target)
     {
         // target.TakeDamage(damagePerTurn);
         //Debug.Log(target.name + " Took " + damagePerTurn + " from poison");
     }
 
-    public override void OnExpire(IFighter target)
+    public override void OnExpire(Fighter target)
     {
         if(target){
             target.attackSpeed = savedSpeed;

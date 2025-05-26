@@ -8,15 +8,15 @@ public class FirstAidBuff : StatusEffect
         this.healPerTurn = healPerTurn;
     }
 
-    public override void OnAPply(IFighter target)
+    public override void OnAPply(Fighter target)
     {
         Debug.Log(target.unitName + " Now has renew");
     }
 
-    public override void OnTimer(IFighter target)
+    public override void OnTimer(Fighter target)
     {
         
-        IFighter lowestHPHero = null;
+        Fighter lowestHPHero = null;
         int lowestHP = int.MaxValue;
         foreach(var hero in CombatManager.Instance.GetHeroList()){
             if(hero._currentLife < lowestHP){
@@ -29,7 +29,7 @@ public class FirstAidBuff : StatusEffect
         }
     }
 
-    public override void OnExpire(IFighter target)
+    public override void OnExpire(Fighter target)
     {
         Debug.Log(target.name + " no longer has renew");
     }

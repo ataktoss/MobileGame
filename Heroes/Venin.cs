@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Venin : IFighter
+public class Venin : Fighter
 {
     void Awake(){
         int poisonDamage = Mathf.RoundToInt(attackDamage*0.2f);

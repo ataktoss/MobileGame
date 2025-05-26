@@ -13,12 +13,12 @@ public abstract class Passive
     }
     
     //Use to apply permanent buffs/debuffs ktlp Should trigger once per fight
-    public abstract void ApplyEffect(IFighter fighter);
+    public abstract void ApplyEffect(Fighter fighter);
 
 
-    public virtual void OnTakeDamage(IFighter fighter, int damage) {}
-    public virtual void OnAttack(IFighter fighter, IFighter target, int damage) {}
+    public virtual void OnTakeDamage(Fighter fighter, int damage) {}
+    public virtual void OnAttack(Fighter fighter, Fighter target, int damage) {}
 
-    public virtual void OnSpellCast(IFighter fighter, int manaCost){}
-    public virtual void OnDeath(IFighter fighter){}
+    public virtual void OnSpellCast(Fighter fighter, int manaCost){}
+    public virtual void OnDeath(Fighter fighter){}
 }

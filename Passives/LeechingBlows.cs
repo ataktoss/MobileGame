@@ -11,28 +11,28 @@ public class LeechingBlows : Passive, IEffect
 
 
 
-    public override void OnAttack(IFighter fighter, IFighter target, int damage)
+    public override void OnAttack(Fighter fighter, Fighter target, int damage)
     {
         fighter.Heal(Mathf.RoundToInt(damage*leechAmount));
     }
 
-    public override void OnSpellCast(IFighter fighter, int manaCost)
+    public override void OnSpellCast(Fighter fighter, int manaCost)
     {
         
     }
 
-    public override void OnTakeDamage(IFighter fighter, int damage)
+    public override void OnTakeDamage(Fighter fighter, int damage)
     {
         
     }
 
 
-    public void Apply(IFighter caster, IFighter target)
+    public void Apply(Fighter caster, Fighter target)
     {
         
     }
 
-    public override void ApplyEffect(IFighter fighter)
+    public override void ApplyEffect(Fighter fighter)
     {
         
     }

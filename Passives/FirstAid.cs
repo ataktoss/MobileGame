@@ -5,12 +5,12 @@ public class FirstAid: Passive,IEffect
     
     public FirstAid():base("First Aid","Heal lowest health ally for 10 every 5 seconds"){}
 
-    public void Apply(IFighter caster, IFighter target)
+    public void Apply(Fighter caster, Fighter target)
     {
         
     }
 
-    public override void ApplyEffect(IFighter fighter)
+    public override void ApplyEffect(Fighter fighter)
     {
         fighter.ApplyDebuff(new FirstAidBuff(10,200,7));
     }

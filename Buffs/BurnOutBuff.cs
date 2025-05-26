@@ -8,17 +8,17 @@ public class BurnOutBuff : StatusEffect
         this.damageIncrease = damageIncrease;   
     }
 
-    public override void OnAPply(IFighter target)
+    public override void OnAPply(Fighter target)
     {
         target.attackDamage = Mathf.RoundToInt(target.attackDamage * 1.4f);
     }
 
-    public override void OnTimer(IFighter target)
+    public override void OnTimer(Fighter target)
     {
         
     }
 
-    public override void OnExpire(IFighter target)
+    public override void OnExpire(Fighter target)
     {
         target.attackDamage = Mathf.RoundToInt(target.attackDamage * 0.6f);
     }

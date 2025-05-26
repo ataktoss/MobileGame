@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Lumen : IFighter
+public class Lumen : Fighter
 {
     void Awake()
     {

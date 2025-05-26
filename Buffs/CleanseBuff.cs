@@ -8,12 +8,12 @@ public class CleanseBuff:StatusEffect
         this.healPerTurn = healPerTurn;
     }
 
-    public override void OnAPply(IFighter target)
+    public override void OnAPply(Fighter target)
     {
         Debug.Log(target.unitName + " Now has renew");
     }
 
-    public override void OnTimer(IFighter target)
+    public override void OnTimer(Fighter target)
     {
         for(int i = target.activeEffects.Count -1; i>=0; i--){
             if(target.activeEffects[i].effectType == StatusEffect.StatusEffectType.Debuff){
@@ -25,7 +25,7 @@ public class CleanseBuff:StatusEffect
         }
     }
 
-    public override void OnExpire(IFighter target)
+    public override void OnExpire(Fighter target)
     {
         Debug.Log(target.name + " no longer has renew");
     }

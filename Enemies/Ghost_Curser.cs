@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Ghost_Curser : IFighter
+public class Ghost_Curser : Fighter
 {
     void Awake()
     {

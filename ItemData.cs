@@ -27,10 +27,10 @@ public class ItemData : ScriptableObject
     public ItemRarity itemRarity;
 
 
-    public virtual void OnEquip(IFighter fighter){}
+    public virtual void OnEquip(Fighter fighter){}
 
-    public virtual void OnAttack(IFighter fighter){}
+    public virtual void OnAttack(Fighter fighter){}
 
-    public virtual void OnSpellCast(IFighter caster, Spell spell, IFighter target){}
+    public virtual void OnSpellCast(Fighter caster, Spell spell, Fighter target){}
     
 }

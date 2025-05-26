@@ -6,10 +6,10 @@ public class HealthBar : MonoBehaviour
 {
 
     public UnityEngine.UI.Image fillImage;
-    public IFighter fighter;
+    public Fighter fighter;
 
 
-    public void SetFighter(IFighter f){
+    public void SetFighter(Fighter f){
         fighter = f;
     }
 

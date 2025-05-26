@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Monster :  IFighter
+public class Monster :  Fighter
 {
     
     public string monsterName;

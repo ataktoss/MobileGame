@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Spider : IFighter
+public class Spider : Fighter
 {
 
     void Awake()

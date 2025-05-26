@@ -9,17 +9,17 @@ public class PoisonHits : Passive, IEffect
         this.poisonDamage = poisonDamage;
     }
 
-    public void Apply(IFighter caster, IFighter target)
+    public void Apply(Fighter caster, Fighter target)
     {
         
     }
 
-    public override void ApplyEffect(IFighter fighter)
+    public override void ApplyEffect(Fighter fighter)
     {
         
     }
 
-    public override void OnAttack(IFighter fighter, IFighter target, int damage)
+    public override void OnAttack(Fighter fighter, Fighter target, int damage)
     {
         int theDamage = fighter.attackDamage;
         target.ApplyDebuff(new PoisonEffect(theDamage,2,1));

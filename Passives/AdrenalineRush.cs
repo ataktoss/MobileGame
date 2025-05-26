@@ -9,7 +9,7 @@ public class AdrenalineRush : Passive,IEffect
 
     public AdrenalineRush():base("AdrenalineRush","Gain +30% attack speed while below 50% life"){}
 
-    public override void OnTakeDamage(IFighter fighter, int damage)
+    public override void OnTakeDamage(Fighter fighter, int damage)
     {
         bool hasBuff = fighter.activeEffects.Any(e => e is AdrenalineRushBuff);
         if(fighter._currentLife<= fighter.life/2){
@@ -27,12 +27,12 @@ public class AdrenalineRush : Passive,IEffect
         }
     }
 
-    public override void ApplyEffect(IFighter fighter)
+    public override void ApplyEffect(Fighter fighter)
     {
         
     }
 
-    public void Apply(IFighter caster, IFighter target)
+    public void Apply(Fighter caster, Fighter target)
     {
         target.ApplyDebuff(new AdrenalineRushBuff(attackSpeedBoost,50,1));
     }

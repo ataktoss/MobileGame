@@ -3,7 +3,7 @@ using UnityEditor.Scripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class CircleHero: IFighter
+public class CircleHero: Fighter
 {
 
 

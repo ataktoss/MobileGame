@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Mosquito : IFighter
+public class Mosquito : Fighter
 {
     void Awake()
     {

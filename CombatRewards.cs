@@ -43,8 +43,8 @@ public class CombatRewards : MonoBehaviour
         
         //ADD LISTENER FOR ON CLICK BUTTON TO PASS ITEM REF
         itemRewardButton1.onClick.AddListener(() => SelectItem(itemReward1));
-        itemRewardButton2.onClick.AddListener(() => SelectItem(itemReward1));
-        itemRewardButton3.onClick.AddListener(() => SelectItem(itemReward1));
+        itemRewardButton2.onClick.AddListener(() => SelectItem(itemReward2));
+        itemRewardButton3.onClick.AddListener(() => SelectItem(itemReward3));
         //HERO REWARD BUTTONS
         heroRewardButton1.onClick.AddListener(() => SelectHero(heroReward1));
         heroRewardButton2.onClick.AddListener(() => SelectHero(heroReward2));
@@ -97,9 +97,9 @@ public class CombatRewards : MonoBehaviour
         heroReward1 = heroDatabase.GetRandomHero();
         heroReward2 = heroDatabase.GetRandomHero();
         heroReward3 = heroDatabase.GetRandomHero();
-        heroName1.text = heroReward1.GetComponent<IFighter>().unitName;
-        heroName2.text = heroReward2.GetComponent<IFighter>().unitName;
-        heroName3.text = heroReward3.GetComponent<IFighter>().unitName;
+        heroName1.text = heroReward1.GetComponent<Fighter>().unitName;
+        heroName2.text = heroReward2.GetComponent<Fighter>().unitName;
+        heroName3.text = heroReward3.GetComponent<Fighter>().unitName;
 
     }
 
@@ -107,8 +107,11 @@ public class CombatRewards : MonoBehaviour
 
     public void SelectItem(ItemData item)
     {
-        GameManager.Instance.AddItemToInventory(item);
+        CombatManager.Instance.currentTeam[0].equippedItems.Add(item);
+        Debug.Log("Adde the item :" + item.itemName);
     }
+
+    
 
     public void SelectHero(GameObject gameObject)
     {

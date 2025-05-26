@@ -5,9 +5,9 @@ public class DebuffTest : MonoBehaviour,IEffect
 {
     public int damagePerTurn;
     public int duration;
-    public IFighter targetDummy;
-    public IFighter targetDummy2;
-    public IFighter targetDummy3;
+    public Fighter targetDummy;
+    public Fighter targetDummy2;
+    public Fighter targetDummy3;
 
     public void Start(){
         Apply(null,targetDummy);
@@ -20,7 +20,7 @@ public class DebuffTest : MonoBehaviour,IEffect
         this.duration = duration;
     }
     
-    public void Apply(IFighter caster,IFighter target ){
+    public void Apply(Fighter caster,Fighter target ){
         target.ApplyDebuff(new CurseEffect(1.25f,5,1));
         
         

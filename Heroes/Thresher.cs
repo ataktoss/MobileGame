@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Thresher : IFighter
+public class Thresher : Fighter
 {
     void Awake(){
         AddPassive(new FeastOnPain());

@@ -4,12 +4,12 @@ public class Deflect: Passive
 {
     public Deflect():base("Deflect","+10% chance to reflect damage current target"){}
 
-    public void Apply(IFighter caster, IFighter target)
+    public void Apply(Fighter caster, Fighter target)
     {
         
     }
 
-    public override void OnTakeDamage(IFighter fighter, int damage)
+    public override void OnTakeDamage(Fighter fighter, int damage)
     {
         if(Random.value <0.10f){
             if(fighter.currentTarget != null){
@@ -18,7 +18,7 @@ public class Deflect: Passive
         }
     }
 
-    public override void ApplyEffect(IFighter fighter)
+    public override void ApplyEffect(Fighter fighter)
     {
         
     }

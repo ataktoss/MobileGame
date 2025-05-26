@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class IFighter : MonoBehaviour
+public class Fighter : MonoBehaviour
 {
     
     public string unitName;
@@ -38,14 +38,14 @@ public class IFighter : MonoBehaviour
     public bool isSilenced = false;
     private bool _isProcessingManaChange = false;
     public Spell fighterSpell;
-    public IFighter currentTarget;
+    public Fighter currentTarget;
     public List<Passive> passives = new List<Passive>();
     public List<StatusEffect> activeEffects = new List<StatusEffect>();
     //DAMAGE TAKEN MODIFIER
     public List<Func<int, int>> damageModifiers = new List<Func<int, int>>();
     //DAMAGE DONE MODIFIER
     public List<Func<int, int>> outgoingDamageModifiers = new List<Func<int, int>>();
-    public List<Item> equipedItems = new List<Item>();
+    public List<ItemData> equipedItems = new List<ItemData>();
 
 
     //Events
@@ -125,7 +125,7 @@ public class IFighter : MonoBehaviour
 
 
 
-    public void StartAttack(IFighter target){
+    public void StartAttack(Fighter target){
         currentTarget = target;
         if(!isAttacking){
             isAttacking = true;
@@ -158,7 +158,7 @@ public class IFighter : MonoBehaviour
     
 
 
-    public void Attack(IFighter target, int damage)
+    public void Attack(Fighter target, int damage)
     {
         if(isFrozen) return;
         bool isCrit = UnityEngine.Random.value < critChance;
@@ -188,7 +188,7 @@ public class IFighter : MonoBehaviour
 
     }
 
-    public virtual void CastSpell(Spell spell, IFighter target){
+    public virtual void CastSpell(Spell spell, Fighter target){
         if(isFrozen) return;
         if(isSilenced) return;
           
@@ -291,10 +291,10 @@ public class IFighter : MonoBehaviour
         }
     }
 
-    public void EquipItem(Item item){
+    public void EquipItem(ItemData item){
         equipedItems.Add(item);
     }
-    public void UnequipItem(Item item){
+    public void UnequipItem(ItemData item){
         equipedItems.Remove(item);
     }
 
@@ -317,6 +317,7 @@ public class IFighter : MonoBehaviour
     public void Start()
     {
         _currentLife = life;
+        Debug.Log($"{unitName} just used the Start Function");
 
         
     }

@@ -3,7 +3,7 @@ using UnityEngine;
 public class GiefPassive : MonoBehaviour
 {
     
-    public IFighter fighter;
+    public Fighter fighter;
     private Passive testPassive;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created

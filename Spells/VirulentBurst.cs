@@ -4,7 +4,7 @@ public class VirulentBurst: Spell
 {
     public VirulentBurst(string name,int manaCost,int damage):base("Virulent Burst",20,1){}
 
-    public override void ApplyEffect(IFighter caster, IFighter target, float spellPower)
+    public override void ApplyEffect(Fighter caster, Fighter target, float spellPower)
     {
         foreach(var enemy in CombatManager.Instance.GetMonsterList()){
             if(enemy == null || !enemy.isAlive) continue;

@@ -7,19 +7,19 @@ public class BlightedEcho : Passive, IEffect
 
 
 
-    public override void OnAttack(IFighter fighter, IFighter target, int damage)
+    public override void OnAttack(Fighter fighter, Fighter target, int damage)
     {
         if(Random.value < 0.30f){
             target.ApplyDebuff(new SilenceEffect(3,1));
         }
     }
 
-    public void Apply(IFighter caster, IFighter target)
+    public void Apply(Fighter caster, Fighter target)
     {
         
     }
 
-    public override void ApplyEffect(IFighter fighter)
+    public override void ApplyEffect(Fighter fighter)
     {
         
     }

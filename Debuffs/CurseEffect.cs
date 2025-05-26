@@ -11,7 +11,7 @@ public class CurseEffect : StatusEffect
         this.curseAmount = curseAmount;
     }
 
-    public override void OnAPply(IFighter target)
+    public override void OnAPply(Fighter target)
     {
         
         damageModifier = (damage) => Mathf.CeilToInt(damage*curseAmount);
@@ -24,12 +24,12 @@ public class CurseEffect : StatusEffect
         
     }
 
-    public override void OnTimer(IFighter target)
+    public override void OnTimer(Fighter target)
     {
         
     }
 
-    public override void OnExpire(IFighter target)
+    public override void OnExpire(Fighter target)
     {
         if(target){
             target.damageModifiers.Remove(damageModifier);
