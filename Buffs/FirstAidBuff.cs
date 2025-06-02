@@ -4,13 +4,13 @@ public class FirstAidBuff : StatusEffect
 {
     public int healPerTurn;
 
-    public FirstAidBuff(int healPerTurn, int duration, int howOften): base("Cleanse",duration,howOften,StatusEffectType.Buff){
+    public FirstAidBuff(int healPerTurn, int duration, int howOften): base("FirstAidBuff",duration,howOften,StatusEffectType.Buff){
         this.healPerTurn = healPerTurn;
     }
 
     public override void OnAPply(Fighter target)
     {
-        Debug.Log(target.unitName + " Now has renew");
+        Debug.Log(target.unitName + " Now has First Aid Buff");
     }
 
     public override void OnTimer(Fighter target)
@@ -25,7 +25,7 @@ public class FirstAidBuff : StatusEffect
             }
         }
         if(lowestHPHero != null){
-            lowestHPHero.Heal(healPerTurn);
+            lowestHPHero.Heal(Mathf.RoundToInt(lowestHPHero.life * 0.05f));
         }
     }
 

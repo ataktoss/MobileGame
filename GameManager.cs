@@ -6,15 +6,15 @@ public class GameManager : MonoBehaviour
     
     public static GameManager Instance {get; private set;}
 
-    public enum GameState{PickingNode,Combat,Shop,Event,combatReward}
+    public enum GameState{PickingNode,Combat,Shop,Event,combatReward,passiveChoice}
     public GameState CurrentState;
 
     //do not touch from another script
     public GameObject mapPanel,combatPanel,shopPanel,rewardPanel;
 
-    
+    public CombatRewards combatRewards;
 
-
+    public FillShop fillShop;
 
     void Awake(){
         if(Instance != null && Instance != this){
@@ -31,7 +31,8 @@ public class GameManager : MonoBehaviour
 
     public void ChangeState(GameState newState){
         CurrentState = newState;
-        switch(newState){
+        switch (newState)
+        {
             case GameState.PickingNode:
                 ShowMap();
                 break;
@@ -43,6 +44,9 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.combatReward:
                 combatReward();
+                break;
+            case GameState.passiveChoice:
+                ShowPassiveChoice();
                 break;
         }
 
@@ -65,11 +69,14 @@ public class GameManager : MonoBehaviour
         Debug.Log("Generating reward buttons");
     }
 
-    public void OpenShop(){
+    public void OpenShop()
+    {
         mapPanel.SetActive(false);
-        combatPanel.SetActive(false);
+        //combatPanel.SetActive(false);
         shopPanel.SetActive(true);
-        rewardPanel.SetActive(false);
+        //rewardPanel.SetActive(false);
+
+        fillShop.FillShopWithItems();
     }
 
     
@@ -82,7 +89,13 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void AddItemToInventory(ItemData item){
+    public void ShowPassiveChoice()
+    {
+        
+    }
+
+    public void AddItemToInventory(ItemData item)
+    {
         Debug.Log("The name of the item is : " + item.itemName);
         //DO STUFF WITH ITEM HERE
     }

@@ -3,8 +3,11 @@ using UnityEngine;
 public class PoisonEffect : StatusEffect
 {
     public int damagePerTurn;
+    
+    //SHOULD BE 20% OF ATTACK DAMAGE ON APPLICATION
 
-    public PoisonEffect(int damagePerTurn, int duration,int howOften): base("Poison",duration,howOften,StatusEffectType.Debuff){
+    public PoisonEffect(int damagePerTurn, int duration, int howOften) : base("Poison", duration, howOften, StatusEffectType.Debuff)
+    {
         this.damagePerTurn = damagePerTurn;
     }
 

@@ -9,8 +9,8 @@ public class GiefPassive : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        testPassive = new AdrenalineRush();
-        fighter.AddPassive(testPassive);
+        // testPassive = new AdrenalineRush();
+        // fighter.AddPassive(testPassive);
     }
 
     // Update is called once per frame

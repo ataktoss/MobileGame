@@ -12,7 +12,7 @@ public class FirstAid: Passive,IEffect
 
     public override void ApplyEffect(Fighter fighter)
     {
-        fighter.ApplyDebuff(new FirstAidBuff(10,200,7));
+        fighter.ApplyDebuff(new FirstAidBuff(10,200,4));
     }
 
     

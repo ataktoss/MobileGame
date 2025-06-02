@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Siwft Blade
   description: +15 attack speed
   icon: {fileID: 0}
-  bonusAttackSpeed: 15
+  bonusAttackSpeed: 0.15
   bonusSpellPower: 0
   bonusLife: 0
   bonusMana: 0

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Balanced Gauntlets
   description: +10 Life, +10 Attack speed
   icon: {fileID: 0}
-  bonusAttackSpeed: 10
+  bonusAttackSpeed: 0.1
   bonusSpellPower: 0
   bonusLife: 10
   bonusMana: 0

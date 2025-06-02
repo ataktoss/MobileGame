@@ -76,21 +76,26 @@ public class MapNodeUI : MonoBehaviour
         }
     }
 
-    public void OnClick(){
+    public void OnClick() {
         Debug.Log("Clicked the button");
         //if(assignedEncounter != null){
-            //Debug.Log($"Entering {nodeType} encounter: {assignedEncounter.groupID}");
+        //Debug.Log($"Entering {nodeType} encounter: {assignedEncounter.groupID}");
+        MapUIManager.Instance.OnNodeCliked(this);
+        //
+        if (nodeType == NodeType.Shop)
+        {
+            //DO SHOP STUFF
+            GameManager.Instance.ChangeState(GameManager.GameState.Shop);
 
-            //
-            if(nodeType == NodeType.Shop){
-                //DO SHOP STUFF
-            }
+        }
 
-
-            //NEED TO ASIGN ENEMIES AND HEROES
+        if (nodeType == NodeType.Combat || nodeType == NodeType.Elite || nodeType == NodeType.Boss)
+        {
             CombatManager.Instance.CurrentEncounter = assignedEncounter;
             CombatManager.Instance.AsignEnemiesAndHeroes();
-            CombatManager.Instance.StartCombat();
+            CombatManager.Instance.SetupCombat();
+        }
+        
         //}
     }
 

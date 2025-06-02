@@ -15,15 +15,15 @@ public class Team : MonoBehaviour
     public TMP_Text hero1Passive1Text, hero1Passive2Text, hero2Passive1Text, hero2Passive2Text, hero3Passive1Text, hero3Passive2Text;
     public Button hero1Spell, hero2Spell, hero3Spell;
     public TMP_Text hero1SpellText, hero2SpellText, hero3SpellText;
-    public Button hero1Relic1, hero1Relic2, hero1Relic3, hero1Relic4, hero1Relic5, hero1Relic6, hero1Relic7, hero1Relic8;
-    public Button hero2Relic1, hero2Relic2, hero3Relic3, hero4Relic4, hero5Relic5, hero6Relic6, hero7Relic7, hero8Relic8;
-
+    // public Button hero1Relic1, hero1Relic2, hero1Relic3, hero1Relic4, hero1Relic5, hero1Relic6, hero1Relic7, hero1Relic8;
+    // public Button hero2Relic1, hero2Relic2, hero3Relic3, hero4Relic4, hero5Relic5, hero6Relic6, hero7Relic7, hero8Relic8;
+    public List<TMP_Text> hero1Relics;
     private bool showingHeroes = false;
     public GameObject InventoryObj;
+    public List<Passive> passiveList;
+    
 
-
-
-    // TA HEROES IPARXOUNE CURRENTLY MONO DURING COMBAT GIAUTO DEN BORW NA TA VRO
+    // REMAKE WHOLE THING MORE ORGANIZED 
     public void GetHeroes()
     {
         List<HeroRuntimeData> heroesData = CombatManager.Instance.GetCurrentTeamInfo();
@@ -36,6 +36,10 @@ public class Team : MonoBehaviour
             heroname1.text = fighterRef.unitName;
             hero1Passive1Text.text = fighterRef.passives[0].passiveName;
             hero1SpellText.text = fighterRef.fighterSpell.name;
+            for (int i = 0; i < heroesData[0].equippedItems.Count; i++)
+            {
+                hero1Relics[i].text = heroesData[0].equippedItems[i].itemName;
+            }
             Destroy(heroInstance);
         }
         if (heroesData.Count > 1 && heroesData[1] != null)

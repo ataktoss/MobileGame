@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,7 +25,15 @@ public class CombatRewards : MonoBehaviour
     public GameObject itemContainer1, itemContainer2, itemContainer3;
     public GameObject heroContainer1, heroContainer2, heroContainer3;
 
+    public GameObject itemHero1, itemHero2, itemHero3;
+    public Button giveItemHero1, giveItemHero2, giveItemHero3;
+    public TMP_Text giveItemHero1Text, giveItemHero2Text, giveItemHero3Text;
+    //PASSIVE REWARDS
+    public List<TMP_Text> passiveRewardNames;
+    public List<GameObject> passiveRewardContainers;
+    public List<Button> choosePassiveRewardButtons;
 
+    private ItemData finalReward;
     
     void Awake(){
         if(Instance != null && Instance != this){
@@ -40,7 +49,7 @@ public class CombatRewards : MonoBehaviour
 
         getItemButton.onClick.AddListener(generateItemRewards);
         getHeroButton.onClick.AddListener(generateHeroReward);
-        
+
         //ADD LISTENER FOR ON CLICK BUTTON TO PASS ITEM REF
         itemRewardButton1.onClick.AddListener(() => SelectItem(itemReward1));
         itemRewardButton2.onClick.AddListener(() => SelectItem(itemReward2));
@@ -49,6 +58,10 @@ public class CombatRewards : MonoBehaviour
         heroRewardButton1.onClick.AddListener(() => SelectHero(heroReward1));
         heroRewardButton2.onClick.AddListener(() => SelectHero(heroReward2));
         heroRewardButton3.onClick.AddListener(() => SelectHero(heroReward3));
+
+        giveItemHero1.onClick.AddListener(() => SelectHeroForItem(1));
+        giveItemHero2.onClick.AddListener(() => SelectHeroForItem(2));
+        giveItemHero3.onClick.AddListener(() => SelectHeroForItem(3));
 
 
     }
@@ -103,14 +116,67 @@ public class CombatRewards : MonoBehaviour
 
     }
 
+    public void GeneratePassiveRewards(int whichHero)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            Passive passiveData = PassiveManager.Instance.GetRandomPassive();
+            if (passiveData == null) continue; // Check if passiveData is null
+            passiveRewardContainers[i].SetActive(true);
+            passiveRewardNames[i].text = passiveData.passiveName;
+            choosePassiveRewardButtons[i].onClick.RemoveAllListeners();
+            choosePassiveRewardButtons[i].onClick.AddListener(() => SelectPassiveReward(passiveData,whichHero));
+        }
+        
 
+    }
+
+    public void SelectPassiveReward(Passive passive, int whichHero)
+    {
+        
+        CombatManager.Instance.GivePassive(whichHero, passive);
+        GameManager.Instance.ChangeState(GameManager.GameState.combatReward);
+        passiveRewardContainers.ForEach(container => container.SetActive(false));
+    }
 
     public void SelectItem(ItemData item)
     {
-        CombatManager.Instance.currentTeam[0].equippedItems.Add(item);
+
+        itemContainer1.SetActive(false);
+        itemContainer2.SetActive(false);
+        itemContainer3.SetActive(false);
+        // CombatManager.Instance.currentTeam[0].equippedItems.Add(item);
+        // GameManager.Instance.ChangeState(GameManager.GameState.PickingNode);
+        itemHero1.SetActive(true);
+        itemHero2.SetActive(true);
+        itemHero3.SetActive(true);
+        finalReward = item;
         Debug.Log("Adde the item :" + item.itemName);
     }
 
+    public void SelectHeroForItem(int heroNumber)
+    {
+        switch (heroNumber)
+        {
+            case 1:
+                CombatManager.Instance.currentTeam[0].equippedItems.Add(finalReward);
+
+                break;
+            case 2:
+                CombatManager.Instance.currentTeam[1].equippedItems.Add(finalReward);
+
+                break;
+            case 3:
+                CombatManager.Instance.currentTeam[2].equippedItems.Add(finalReward);
+
+                break;
+        }
+        itemHero1.SetActive(false);
+        itemHero2.SetActive(false);
+        itemHero3.SetActive(false);
+        GameManager.Instance.ChangeState(GameManager.GameState.PickingNode);
+            
+    }
     
 
     public void SelectHero(GameObject gameObject)

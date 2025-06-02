@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Reinforced Boots
   description: +5 life,attackSpeed
   icon: {fileID: 0}
-  bonusAttackSpeed: 10
+  bonusAttackSpeed: 0.1
   bonusSpellPower: 0
   bonusLife: 5
   bonusMana: 0

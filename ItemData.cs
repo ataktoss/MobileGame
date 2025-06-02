@@ -19,7 +19,7 @@ public class ItemData : ScriptableObject
     public string description;
     public Sprite icon;
 
-    public int bonusAttackSpeed;
+    public float bonusAttackSpeed;
     public int bonusSpellPower;
     public int bonusLife;
     public int bonusMana;

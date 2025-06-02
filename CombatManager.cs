@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 [System.Serializable]
@@ -10,8 +11,11 @@ public class HeroRuntimeData
 {
     public GameObject prefab; // The hero type (used to instantiate)
     public List<ItemData> equippedItems = new();
+    public List<Passive> passives = new();
     public string nickname;
-    public int level;
+    public int level = 1;
+    public int currentXP = 0;
+
 
     // You can extend this later with talents, stats, etc.
 }
@@ -31,6 +35,8 @@ public class CombatManager : MonoBehaviour
     public List<Transform> enemySpawnPoints;
     public List<Transform> heroSpawnPoints;
     public static CombatManager Instance { get; private set; }
+    public Button startCombatButton;
+    public GameObject starterHeroprefab;
 
     private float timer = 0f;
     private Coroutine combatLoop;
@@ -45,7 +51,8 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-
+    private float combatScale = 1;
+    
 
 
 
@@ -149,7 +156,9 @@ public class CombatManager : MonoBehaviour
             Fighter fighterRef = instance.GetComponent<Fighter>();
             if (fighterRef != null)
             {
+
                 monsters.Add(fighterRef);
+                ScaleMonsters(fighterRef);
                 UnityEngine.Debug.Log("Added " + fighterRef.name + " to enemy List");
             }
 
@@ -172,13 +181,39 @@ public class CombatManager : MonoBehaviour
             if (fighterRef != null)
             {
                 heroes.Add(fighterRef);
-                UnityEngine.Debug.Log("Added " + fighterRef.name + " to enemy List");
+                UnityEngine.Debug.Log("Added " + fighterRef.name + " to hero List");
+                foreach (var item in currentTeam[i].equippedItems)
+                {
+                    fighterRef.EquipItem(item);
+                }
+                foreach (var passive in currentTeam[i].passives)
+                {
+                    fighterRef.AddPassive(passive);
+                }
             }
         }
+        //SCALE ENEMIES
+        combatScale += 0.1f;
+        UnityEngine.Debug.Log("Combat scale is now: " + combatScale);
     }
 
+    void ScaleMonsters(Fighter monster)
+    {
+        if (monster == null) return;
 
+        // Scale the monster's stats based on the combat scale
+        monster.life = Mathf.RoundToInt(monster.life * combatScale);
+        monster.attackDamage = Mathf.RoundToInt(monster.attackDamage * combatScale);
+        
 
+        
+    }
+
+    void Start()
+    {
+        startCombatButton.onClick.AddListener(StartCombat);
+        AddHero(starterHeroprefab);
+    }
 
 
     void Awake()
@@ -199,16 +234,17 @@ public class CombatManager : MonoBehaviour
 
     }
 
+    public void SetupCombat()
+    {
+        GameManager.Instance.ChangeState(GameManager.GameState.Combat);
+        startCombatButton.gameObject.SetActive(true);
+    }
     public void StartCombat()
     {
-        // foreach (var hero in heroObjects)
-        // {
-        //     heroes.Add(hero.GetComponent<IFighter>());
 
-
-        // }
-        GameManager.Instance.ChangeState(GameManager.GameState.Combat);
+        //GameManager.Instance.ChangeState(GameManager.GameState.Combat);
         combatLoop = StartCoroutine(UpdateCombatLoop());
+        startCombatButton.gameObject.SetActive(false);
     }
     private void EndCombat()
     {
@@ -216,13 +252,31 @@ public class CombatManager : MonoBehaviour
         //StopCoroutine(combatLoop);
         foreach (var hero in heroes)
         {
-
+            if (hero.gameObject == null) continue;
             Destroy(hero.gameObject);
         }
         heroes.Clear();
         monsters.Clear();
-        GameManager.Instance.ChangeState(GameManager.GameState.combatReward);
 
+        for (int i = 0; i < currentTeam.Count; i++)
+        {
+            currentTeam[i].currentXP+=2;
+            if (currentTeam[i].currentXP >= 3) // Example level up condition
+            {
+                currentTeam[i].level++;
+                currentTeam[i].currentXP = 0; // Reset XP after leveling up
+                //UnityEngine.Debug.Log($"{currentTeam[i].prefab.GetComponent<Fighter>().unitName} leveled up to level {currentTeam[i].level}!");
+                currentTeam[i].prefab.GetComponent<Fighter>().LevelUp();
+
+                if (currentTeam[i].level == 3)
+                {
+                    CombatRewards.Instance.GeneratePassiveRewards(i);
+                }
+                
+                //GameManager.Instance.ChangeState(GameManager.GameState.passiveChoice);        
+            }
+        }
+        GameManager.Instance.ChangeState(GameManager.GameState.combatReward);
     }
 
     public void AddHero(GameObject hero)
@@ -231,6 +285,11 @@ public class CombatManager : MonoBehaviour
         newHero.prefab = hero;
         currentTeam.Add(newHero);
         UnityEngine.Debug.Log("Just added the Hero " + hero.name);
+    }
+    public void GivePassive(int whichHero, Passive passive)
+    {
+        currentTeam[whichHero].passives.Add(passive);
+        UnityEngine.Debug.Log($"Added passive {passive.passiveName} to hero {currentTeam[whichHero].prefab.GetComponent<Fighter>().unitName}");
     }
     public List<Fighter> GetHeroList()
     {
