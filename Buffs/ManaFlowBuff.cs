@@ -8,7 +8,7 @@ public class ManaFlowBuff: StatusEffect
         this.manaPerTurn = manaPerTurn;
     }
 
-    public override void OnAPply(Fighter target)
+    public override void OnApply(Fighter target)
     {
         Debug.Log(target.unitName + " Now has renew");
     }

@@ -8,7 +8,7 @@ public class CleanseBuff:StatusEffect
         this.healPerTurn = healPerTurn;
     }
 
-    public override void OnAPply(Fighter target)
+    public override void OnApply(Fighter target)
     {
         Debug.Log(target.unitName + " Now has renew");
     }

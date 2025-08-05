@@ -21,6 +21,7 @@ public class Fighter : MonoBehaviour
     public int baseLife;
     public int life;
     public int _currentLife;
+    public int shield;
     public int mana;
     public float baseAttackSpeed;
     public float attackSpeed;
@@ -28,10 +29,14 @@ public class Fighter : MonoBehaviour
     public int attackRange;
     public float movementSpeed = 5f;
     public int attackDamage;
+
+    //Default spellPower 0 kai aplos pernei added apo items + spells + alla chars. Reset on combat start
     public int spellPower = 0;
     public int numberOfAttacks = 0;
     public int _currentMana = 0;
+    public float basecritChance = 0.05f; 
     public float critChance = 0.05f;
+    public float basecritDamage = 2f; 
     public float critDamage = 2f;
     public int manaGainedFromHits = 5;
     public int currentXP = 0;
@@ -41,6 +46,8 @@ public class Fighter : MonoBehaviour
     public float TotalAttackSpeed => attackSpeed * (1 + equipedItems.Sum(item => item.bonusAttackSpeed));
     public int TotalSpellPower => spellPower + equipedItems.Sum(item => item.bonusSpellPower);
     public int TotalLife => baseLife + equipedItems.Sum(item => item.bonusLife);
+    public float TotalCriticalChance => critChance + equipedItems.Sum(item => item.bonusCriticalChance);
+    public float TotalCriticalDamage => critDamage + equipedItems.Sum(item => item.bonusCriticalDamage);
 
 
     private float lastEffectTick;
@@ -54,12 +61,13 @@ public class Fighter : MonoBehaviour
     public Spell fighterSpell;
     public Fighter currentTarget;
     public FighterType fighterType;
+
     public List<Passive> passives = new List<Passive>();
     public List<StatusEffect> activeEffects = new List<StatusEffect>();
     //DAMAGE TAKEN MODIFIER
-    public List<Func<int, int>> damageModifiers = new List<Func<int, int>>();
+    public List<Func<int, int>> damageTakenModifiers = new List<Func<int, int>>();
     //DAMAGE DONE MODIFIER
-    public List<Func<int, int>> outgoingDamageModifiers = new List<Func<int, int>>();
+    public List<Func<int, int>> damageDoneModifiers = new List<Func<int, int>>();
     public List<ItemData> equipedItems = new List<ItemData>();
 
 
@@ -67,6 +75,7 @@ public class Fighter : MonoBehaviour
     public event Action<int> OnHealthChanged;
     public event Action<int> OnManaChanged;
     public event Action OnAttackPerformed;
+    //public event Action ModifyDamageTaken;
     public event Action<int> OnTakeDamage;
     public event Action<int> OnSpellCast;
     //public event Action<int> OnCrit;
@@ -85,16 +94,17 @@ public class Fighter : MonoBehaviour
         if (this.gameObject != null)
         {
 
-            foreach (var mod in damageModifiers)
+            foreach (var mod in damageTakenModifiers)
             {
                 amount = mod.Invoke(amount);
             }
-            //Debug.Log("I AM TAKING DAMAGE CURRENT LIFE : " + _currentLife);
-            _currentLife -= amount;
-            //Debug.Log("NOW MY LIFE IS : " + _currentLife);
-            //Debug.Log(unitName + " took " + amount + " damage!" + "Now life is : " + _currentLife);
+            foreach (var passive in passives)
+            {
+                amount = passive.ModifyDamageTaken(this, amount); // <- tell passives
+            }
 
-            // ✨ Fire events
+            _currentLife -= amount;
+
             OnHealthChanged?.Invoke(_currentLife);
             OnTakeDamage?.Invoke(amount);
 
@@ -189,24 +199,26 @@ public class Fighter : MonoBehaviour
 
     public void Attack(Fighter target, int damage)
     {
-        Debug.Log("" + unitName + " attacked " + target.unitName + " for " + damage + " damage! BEFORE DAMAGE MODIFIERS");
+        //Debug.Log("" + unitName + " attacked " + target.unitName + " for " + damage + " damage! BEFORE DAMAGE MODIFIERS");
         if (isFrozen) return;
-        bool isCrit = UnityEngine.Random.value < critChance;
+        bool isCrit = UnityEngine.Random.value < TotalCriticalChance;
         int finalDamage = damage;
         if (isCrit)
         {
-            finalDamage = (int)(damage * critDamage);
+            finalDamage = (int)(damage * TotalCriticalDamage);
             Debug.Log("CRITICAL HIT!");
         }
-        foreach (var mod in outgoingDamageModifiers)
+
+        foreach (var passive in passives)
+        {
+            finalDamage = passive.ModifyDamageTaken(this, finalDamage); 
+        }
+        foreach (var mod in damageDoneModifiers)
         {
             finalDamage = mod(finalDamage);
         }
 
-        target.TakeDamage(finalDamage);
-        Debug.Log("" + unitName + " attacked " + target.unitName + " for " + finalDamage + " damage!");
-        Debug.Log(unitName + "current damage is : " + attackDamage);
-        ChangeMana(manaGainedFromHits);
+
         //Debug.Log(unitName + " attacked for " + damage + " damage!" );
 
         // ✨ Fire event
@@ -218,7 +230,15 @@ public class Fighter : MonoBehaviour
         {
             passive.OnAttack(this, target, damage); // <- tell passives
         }
+        // foreach (var mod in damageDoneModifiers)
+        // {
+        //     finalDamage = mod(finalDamage);
+        // }
 
+        target.TakeDamage(finalDamage);
+        Debug.Log("" + unitName + " attacked " + target.unitName + " for " + finalDamage + " damage After damage mods");
+        //Debug.Log(unitName + "current damage is : " + attackDamage);
+        ChangeMana(manaGainedFromHits);
 
 
     }
@@ -269,6 +289,12 @@ public class Fighter : MonoBehaviour
 
     }
 
+    public void ChangeShield(int amount)
+    {
+        shield += amount;
+        
+    }
+
     public void AddPassive(Passive newPassive)
     {
         passives.Add(newPassive);
@@ -282,7 +308,7 @@ public class Fighter : MonoBehaviour
     public void ApplyDebuff(StatusEffect effect)
     {
         activeEffects.Add(effect);
-        effect.OnAPply(this);
+        effect.OnApply(this);
 
     }
 
@@ -383,7 +409,7 @@ public class Fighter : MonoBehaviour
                 // Reduced damage taken buffby some sort
                 break;
             case FighterType.Support:
-                AddPassive(new FirstAid());
+                //AddPassive(new FirstAid());
                 break;
         }
         
@@ -402,6 +428,9 @@ public class Fighter : MonoBehaviour
     public void PrepareForCombat()
     {
         attackSpeed = baseAttackSpeed;
+        spellPower = 0;
+        critChance = basecritChance; 
+        critDamage = basecritDamage; 
         life = TotalLife; // BASE LIFE + ITEMS
         SetStatsFromType(fighterType);
         enableAllPassives();
@@ -412,8 +441,8 @@ public class Fighter : MonoBehaviour
         isFrozen = false;
         isSilenced = false;
         numberOfAttacks = 0;
-        outgoingDamageModifiers.Clear();
-        damageModifiers.Clear();
+        damageDoneModifiers.Clear();
+        damageTakenModifiers.Clear();
         activeEffects.Clear();
 
         Debug.Log($"{unitName} is prepared for combat with {TotalLife} life and {mana} mana.");

@@ -10,7 +10,7 @@ public class ManaFlare : Spell
     {
         int baseSpellDamage = 30;
         int finalDamage = baseSpellDamage + Mathf.RoundToInt(spellPower * 0.6f);
-        foreach (var dmgBuff in caster.outgoingDamageModifiers)
+        foreach (var dmgBuff in caster.damageDoneModifiers)
         {
             finalDamage = dmgBuff(finalDamage);
         }

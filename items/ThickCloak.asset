@@ -15,8 +15,11 @@ MonoBehaviour:
   itemName: Thick Cloak
   description: Gain + 30 life
   icon: {fileID: 0}
+  bonusAttackDamage: 0
   bonusAttackSpeed: 0
   bonusSpellPower: 0
   bonusLife: 30
   bonusMana: 0
+  shopCost: 5
+  shopSellValue: 0
   itemRarity: 0

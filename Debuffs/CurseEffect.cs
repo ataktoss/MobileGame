@@ -15,7 +15,7 @@ public class CurseEffect : StatusEffect
     {
         
         damageModifier = (damage) => Mathf.CeilToInt(damage*curseAmount);
-        target.damageModifiers.Add(damageModifier);
+        target.damageTakenModifiers.Add(damageModifier);
         Debug.Log($"{target.unitName} is cursed! and now takes " + curseAmount + " more damage ");
 
 
@@ -32,7 +32,7 @@ public class CurseEffect : StatusEffect
     public override void OnExpire(Fighter target)
     {
         if(target){
-            target.damageModifiers.Remove(damageModifier);
+            target.damageTakenModifiers.Remove(damageModifier);
             Debug.Log(target.name + "Is no longer Cursed");
         }
         

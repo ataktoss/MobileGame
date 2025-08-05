@@ -17,10 +17,10 @@ public class IronSkinBuff : StatusEffect
     {
     }
 
-    public override void OnAPply(Fighter target)
+    public override void OnApply(Fighter target)
     {
         
-        target.damageModifiers.Add(reduceDamage);
+        target.damageTakenModifiers.Add(reduceDamage);
     }
     public override void OnTimer(Fighter target)
     {
@@ -33,7 +33,7 @@ public class IronSkinBuff : StatusEffect
     }
     public override void OnExpire(Fighter target)
     {
-        target.damageModifiers.Remove(reduceDamage);
+        target.damageTakenModifiers.Remove(reduceDamage);
     }
 
 

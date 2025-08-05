@@ -15,7 +15,7 @@ public class BurnOut : Passive, IEffect
     public override void OnSpellCast(Fighter fighter, int manaCost)
     {
         currentAttackNumber = fighter.numberOfAttacks;
-        fighter.ApplyDebuff(new BurnOutBuff(1,100,1));
+        fighter.ApplyDebuff(new BurnOutBuff(1.4f,100,1));
     }
 
 

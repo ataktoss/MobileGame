@@ -8,7 +8,7 @@ public class AdrenalineRushBuff : StatusEffect
         this.attackSpeedModifier = attackSpeedBoost;
     }
 
-    public override void OnAPply(Fighter target)
+    public override void OnApply(Fighter target)
     {
         target.attackSpeed *= 1+attackSpeedModifier;
         Debug.Log(target.unitName + " Now has modified attack speed");

@@ -14,7 +14,7 @@ public class HealLowest: Spell
         Fighter lowestHealthHero = null;
         int minHealth = int.MaxValue;
 
-        foreach(var hero in CombatManager.Instance.GetHeroList()){
+        foreach(var hero in heroes){
             if(hero == null || !hero.isAlive) continue;
             if(hero._currentLife < minHealth){
                 minHealth = hero._currentLife;

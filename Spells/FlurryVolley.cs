@@ -9,7 +9,7 @@ public class FlurryVolley : Spell
     public override void ApplyEffect(Fighter caster, Fighter target, float spellPower)
     {
         int spellDamage = caster.attackDamage;
-        foreach (var dmgBuff in caster.outgoingDamageModifiers)
+        foreach (var dmgBuff in caster.damageDoneModifiers)
         {
             spellDamage = dmgBuff(spellDamage);
         }

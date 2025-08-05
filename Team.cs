@@ -12,6 +12,7 @@ public class Team : MonoBehaviour
     public GameObject heroHolder1, heroHolder2, heroHolder3;
     public TMP_Text heroname1, heroName2, heroName3;
     public Button hero1Passive1, hero1Passive2, hero2Passive1, hero2Passive2, hero3Passive1, hero3Passive2;
+    public Image hero1Passive1Icon, hero1Passive2Icon, hero2Passive1Icon, hero2Passive2Icon, hero3Passive1Icon, hero3Passive2Icon;
     public TMP_Text hero1Passive1Text, hero1Passive2Text, hero2Passive1Text, hero2Passive2Text, hero3Passive1Text, hero3Passive2Text;
     public Button hero1Spell, hero2Spell, hero3Spell;
     public TMP_Text hero1SpellText, hero2SpellText, hero3SpellText;
@@ -35,6 +36,7 @@ public class Team : MonoBehaviour
             Fighter fighterRef = heroInstance.GetComponent<Fighter>();
             heroname1.text = fighterRef.unitName;
             hero1Passive1Text.text = fighterRef.passives[0].passiveName;
+            hero1Passive1Icon.sprite = fighterRef.passives[0].icon;
             hero1SpellText.text = fighterRef.fighterSpell.name;
             for (int i = 0; i < heroesData[0].equippedItems.Count; i++)
             {

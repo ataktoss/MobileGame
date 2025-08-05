@@ -6,7 +6,7 @@ public class CombatRewards : MonoBehaviour
 {
 
     //public Button getHeroButton;
-    public static CombatRewards Instance{ get; private set; }
+    public static CombatRewards Instance { get; private set; }
     public Button getItemButton;
     public Button getHeroButton;
 
@@ -33,10 +33,12 @@ public class CombatRewards : MonoBehaviour
     public List<GameObject> passiveRewardContainers;
     public List<Button> choosePassiveRewardButtons;
 
-    private ItemData finalReward;
-    
-    void Awake(){
-        if(Instance != null && Instance != this){
+    private ItemData pendingItemReward;
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
             Destroy(this.gameObject);
             return;
         }
@@ -76,7 +78,7 @@ public class CombatRewards : MonoBehaviour
     {
         getItemButton.gameObject.SetActive(true);
         getHeroButton.gameObject.SetActive(true);
-        
+
     }
 
     public void generateItemRewards()
@@ -116,24 +118,24 @@ public class CombatRewards : MonoBehaviour
 
     }
 
-    public void GeneratePassiveRewards(int whichHero)
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            Passive passiveData = PassiveManager.Instance.GetRandomPassive();
-            if (passiveData == null) continue; // Check if passiveData is null
-            passiveRewardContainers[i].SetActive(true);
-            passiveRewardNames[i].text = passiveData.passiveName;
-            choosePassiveRewardButtons[i].onClick.RemoveAllListeners();
-            choosePassiveRewardButtons[i].onClick.AddListener(() => SelectPassiveReward(passiveData,whichHero));
-        }
-        
+    // public void GeneratePassiveRewards(int whichHero)
+    // {
+    //     for (int i = 0; i < 3; i++)
+    //     {
+    //         Passive passiveData = PassiveManager.Instance.GetRandomPassive();
+    //         if (passiveData == null) continue; // Check if passiveData is null
+    //         passiveRewardContainers[i].SetActive(true);
+    //         passiveRewardNames[i].text = passiveData.passiveName;
+    //         choosePassiveRewardButtons[i].onClick.RemoveAllListeners();
+    //         choosePassiveRewardButtons[i].onClick.AddListener(() => SelectPassiveReward(passiveData, whichHero));
+    //     }
 
-    }
+
+    // }
 
     public void SelectPassiveReward(Passive passive, int whichHero)
     {
-        
+
         CombatManager.Instance.GivePassive(whichHero, passive);
         GameManager.Instance.ChangeState(GameManager.GameState.combatReward);
         passiveRewardContainers.ForEach(container => container.SetActive(false));
@@ -150,7 +152,7 @@ public class CombatRewards : MonoBehaviour
         itemHero1.SetActive(true);
         itemHero2.SetActive(true);
         itemHero3.SetActive(true);
-        finalReward = item;
+        pendingItemReward = item;
         Debug.Log("Adde the item :" + item.itemName);
     }
 
@@ -159,15 +161,15 @@ public class CombatRewards : MonoBehaviour
         switch (heroNumber)
         {
             case 1:
-                CombatManager.Instance.currentTeam[0].equippedItems.Add(finalReward);
+                CombatManager.Instance.currentTeam[0].equippedItems.Add(pendingItemReward);
 
                 break;
             case 2:
-                CombatManager.Instance.currentTeam[1].equippedItems.Add(finalReward);
+                CombatManager.Instance.currentTeam[1].equippedItems.Add(pendingItemReward);
 
                 break;
             case 3:
-                CombatManager.Instance.currentTeam[2].equippedItems.Add(finalReward);
+                CombatManager.Instance.currentTeam[2].equippedItems.Add(pendingItemReward);
 
                 break;
         }
@@ -175,9 +177,9 @@ public class CombatRewards : MonoBehaviour
         itemHero2.SetActive(false);
         itemHero3.SetActive(false);
         GameManager.Instance.ChangeState(GameManager.GameState.PickingNode);
-            
+
     }
-    
+
 
     public void SelectHero(GameObject gameObject)
     {
@@ -188,6 +190,17 @@ public class CombatRewards : MonoBehaviour
         Debug.Log("Selecting the hero " + gameObject.name);
         CombatManager.Instance.AddHero(gameObject);
         GameManager.Instance.ChangeState(GameManager.GameState.PickingNode);
+    }
+
+    public void BeginSelectHeroForItem(ItemData item)
+    {
+        pendingItemReward = item;
+        itemHero1.SetActive(true);
+        itemHero2.SetActive(true);
+        itemHero3.SetActive(true);
+        itemContainer1.SetActive(false);
+        itemContainer2.SetActive(false);
+        itemContainer3.SetActive(false);  
     }
 
 }

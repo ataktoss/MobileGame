@@ -9,7 +9,7 @@ public class BrutalSwing : Spell
     public override void ApplyEffect(Fighter caster,Fighter target,float spellPower){
         int currentAttackPower = caster.attackDamage;
         int finalDamage = (int)(currentAttackPower*2);
-        foreach(var weaken in caster.outgoingDamageModifiers){
+        foreach(var weaken in caster.damageDoneModifiers){
             finalDamage = weaken(finalDamage);
         }
         //target.TakeDamage(finalDamage);

@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01f997475c17b0f4b90070a841eb4458, type: 3}
   m_Name: SwiftBlade
   m_EditorClassIdentifier: 
-  itemName: Siwft Blade
+  itemName: Swift Blade
   description: +15 attack speed
   icon: {fileID: 0}
+  bonusAttackDamage: 0
   bonusAttackSpeed: 0.15
   bonusSpellPower: 0
   bonusLife: 0
   bonusMana: 0
+  shopCost: 5
+  shopSellValue: 0
   itemRarity: 0

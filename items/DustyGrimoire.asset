@@ -15,8 +15,11 @@ MonoBehaviour:
   itemName: Dusty Grimoire
   description: +20 Spell Power
   icon: {fileID: 0}
+  bonusAttackDamage: 0
   bonusAttackSpeed: 0
   bonusSpellPower: 20
   bonusLife: 0
   bonusMana: 0
+  shopCost: 5
+  shopSellValue: 0
   itemRarity: 0

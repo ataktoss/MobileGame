@@ -10,7 +10,7 @@ public class BloodPriceEffect:StatusEffect
     public override void OnAPply(Fighter target)
     {
         //target.attackDamage = Mathf.RoundToInt(target.attackDamage * 1.1f);
-        target.outgoingDamageModifiers.Add(damage => (int)(damage*1.1f));
+        target.damageDoneModifiers.Add(damage => (int)(damage*1.1f));
     }
 
     public override void OnTimer(Fighter target)

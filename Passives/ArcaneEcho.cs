@@ -13,7 +13,7 @@ public class ArcaneEcho : Passive
     public override void OnAttack(Fighter fighter, Fighter target, int damage)
     {
         int extraDamage = Mathf.RoundToInt(fighter.spellPower * 0.3f) + 10; // Base extra damage is 10 plus 30% of spell power
-        foreach (var dmgBonus in fighter.outgoingDamageModifiers)
+        foreach (var dmgBonus in fighter.damageDoneModifiers)
         {
             extraDamage = dmgBonus(extraDamage);
         }

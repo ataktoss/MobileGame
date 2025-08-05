@@ -14,7 +14,7 @@ public class WeakenEffect : StatusEffect
     {
         
         damageModifier = (damage) => Mathf.CeilToInt(damage*weakenAmount);
-        target.damageModifiers.Add(damageModifier);
+        target.damageTakenModifiers.Add(damageModifier);
         Debug.Log($"{target.unitName} is Weakened! and now deals " + weakenAmount + " less damage ");
 
 
@@ -31,7 +31,7 @@ public class WeakenEffect : StatusEffect
     public override void OnExpire(Fighter target)
     {
         if(target){
-            target.damageModifiers.Remove(damageModifier);
+            target.damageTakenModifiers.Remove(damageModifier);
             Debug.Log(target.name + "Is no longer burning");
         }
         

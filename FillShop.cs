@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -17,29 +18,53 @@ public class FillShop : MonoBehaviour
     public void FillShopWithItems()
     {
         // Clear existing items
-        
+
 
 
         // Get random items from the database
         List<ItemData> allItems = itemDatabase.GetRandomItems(numberOfItemsInShop);
+        // for (int i = 0; i < numberOfItemsInShop; i++)
+        // {
+        //     //POSSIBLE IF STATEMENT FOR EXAMPLE IF EPIC ITEM THEN SHOW EPIC BORDER
+
+        //     getItemButtons[i].onClick.AddListener(() => OnGetItemButtonClicked(allItems[i]));
+        //     //itemIcons[i].sprite = allItems[i].icon;
+        //     itemNames[i].text = allItems[i].itemName;
+        //     itemDescriptions[i].text = allItems[i].description;
+
+        // }
         for (int i = 0; i < numberOfItemsInShop; i++)
         {
-            //POSSIBLE IF STATEMENT FOR EXAMPLE IF EPIC ITEM THEN SHOW EPIC BORDER
+            int index = i;
 
-            getItemButtons[i].onClick.AddListener(() => OnGetItemButtonClicked(allItems[i]));
-            //itemIcons[i].sprite = allItems[i].icon;
-            itemNames[i].text = allItems[i].itemName;
-            itemDescriptions[i].text = allItems[i].description;
+            getItemButtons[index].onClick.RemoveAllListeners();
+            getItemButtons[index].onClick.AddListener(() => OnGetItemButtonClicked(allItems[index]));
 
+            itemNames[index].text = allItems[index].itemName;
+            itemDescriptions[index].text = allItems[index].description;
         }
+        
     }
 
 
     public void OnGetItemButtonClicked(ItemData item)
     {
         //CHOSE THE HERO THAT GETS THE ITEM
+
         //REMOVE GOLD FROM PLAYER
         //ADD ITEM TO HERO
+        Debug.Log($"Item {item.itemName} has been selected.");
+        if (CombatManager.Instance.SpendGold(item.shopCost))
+        {
+            CombatRewards.Instance.BeginSelectHeroForItem(item);
+            
+        }
+        else
+        {
+            Debug.Log("Not enough gold to purchase this item.");
+        }
+        
+        
 
     }
     

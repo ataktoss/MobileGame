@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c22d4b48ff89bb4eb0b1d5fab7a5aa8, type: 3}
-  m_Name: PassiveDatabase1
+  m_Script: {fileID: 11500000, guid: 0a8eb7b2db7331e47b71638a7301e625, type: 3}
+  m_Name: SpellWeaver
   m_EditorClassIdentifier: 
-  allPassives:
-  - {fileID: 11400000, guid: a1765553b01acf041849b0646d09e9ef, type: 2}
-  - {fileID: 11400000, guid: a6fe6932c9c924444a07f79aabd3f6a6, type: 2}
+  passiveName: Spell Weaver
+  description: Cast a spell instead of attacking
+  icon: {fileID: 21300000, guid: 203e6f0fbd6b1344f9fb778c67c6db9c, type: 3}
+  type: 9

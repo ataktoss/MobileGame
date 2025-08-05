@@ -15,8 +15,11 @@ MonoBehaviour:
   itemName: Tattered Cloak
   description: +20 Life
   icon: {fileID: 0}
+  bonusAttackDamage: 0
   bonusAttackSpeed: 0
   bonusSpellPower: 0
   bonusLife: 20
   bonusMana: 0
+  shopCost: 5
+  shopSellValue: 0
   itemRarity: 0

@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class BurnOutBuff : StatusEffect
 {
-    
+    //Increase damage of next attack by damageIncrease%
     public float damageIncrease;
-    public BurnOutBuff(int damageIncrease, int duration, int howOften): base("BurnOut",duration,howOften,StatusEffectType.Buff){
+    public BurnOutBuff(float damageIncrease, int duration, int howOften): base("BurnOut",duration,howOften,StatusEffectType.Buff){
         this.damageIncrease = damageIncrease;   
     }
 
-    public override void OnAPply(Fighter target)
+    public override void OnApply(Fighter target)
     {
-        target.attackDamage = Mathf.RoundToInt(target.attackDamage * 1.4f);
+        target.attackDamage = Mathf.RoundToInt(target.attackDamage * damageIncrease);
     }
 
     public override void OnTimer(Fighter target)

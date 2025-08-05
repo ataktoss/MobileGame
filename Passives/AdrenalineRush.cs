@@ -7,8 +7,8 @@ public class AdrenalineRush : Passive,IEffect
 {
     float attackSpeedBoost = 0.3f;
 
-    public AdrenalineRush():base("AdrenalineRush","Gain +30% attack speed while below 50% life"){}
-
+    //public AdrenalineRush():base("AdrenalineRush","Gain +30% attack speed while below 50% life"){}
+    public AdrenalineRush(PassiveData data) : base(data) { }
     public override void OnTakeDamage(Fighter fighter, int damage)
     {
         bool hasBuff = fighter.activeEffects.Any(e => e is AdrenalineRushBuff);

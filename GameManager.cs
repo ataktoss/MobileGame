@@ -78,14 +78,16 @@ public class GameManager : MonoBehaviour
 
         fillShop.FillShopWithItems();
     }
+    
 
     
 
-    public void ShowMap(){
+    public void ShowMap()
+    {
         mapPanel.SetActive(true);
-        // combatPanel.SetActive(false);
-        // shopPanel.SetActive(false);
-        // rewardPanel.SetActive(false);
+        //combatPanel.SetActive(false);
+        shopPanel.SetActive(false);
+        //rewardPanel.SetActive(false);
 
     }
 

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class SilentEdge : Spell
 {
+    //Gain 5% crit chance
     public SilentEdge(string name, int manaCost, int cooldown) : base(name, manaCost, cooldown)
     {
     }

@@ -1,10 +1,26 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PassiveData", menuName = "Scriptable Objects/PassiveData")]
+public enum PassiveType
+{
+    AdrenalineRush,
+    ArcaneFlow,
+    LeechingBlows,
+    FirstAid,
+    LonePredator,
+    ResilientShell,
+    ToxicPrecision,
+    Spellash,
+    EchoFang,
+    Spellweaver,
+    IronRhythm
+    // Add all passives here
+}
+
+[CreateAssetMenu(fileName = "New Passive", menuName = "RPG/Passive")]
 public class PassiveData : ScriptableObject
 {
-    public string passiveId;
     public string passiveName;
     public string description;
     public Sprite icon;
+    public PassiveType type;
 }

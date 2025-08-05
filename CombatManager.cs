@@ -37,6 +37,7 @@ public class CombatManager : MonoBehaviour
     public static CombatManager Instance { get; private set; }
     public Button startCombatButton;
     public GameObject starterHeroprefab;
+    public PassiveDatabase passiveDatabase;
 
     private float timer = 0f;
     private Coroutine combatLoop;
@@ -52,9 +53,23 @@ public class CombatManager : MonoBehaviour
     }
 
     private float combatScale = 1;
-    
 
+    public int playerGold = 50;
 
+    public bool SpendGold(int amount)
+    {
+        if (amount <= playerGold)
+        {
+            playerGold -= amount;
+            UnityEngine.Debug.Log("Spent " + amount + " gold.");
+            return true;
+        }
+        else
+        {
+            UnityEngine.Debug.Log("Not enough gold.");
+            return false;
+        }
+    }
 
     IEnumerator<System.Object> UpdateCombatLoop()
     {
@@ -260,7 +275,7 @@ public class CombatManager : MonoBehaviour
 
         for (int i = 0; i < currentTeam.Count; i++)
         {
-            currentTeam[i].currentXP+=2;
+            currentTeam[i].currentXP += 2;
             if (currentTeam[i].currentXP >= 3) // Example level up condition
             {
                 currentTeam[i].level++;
@@ -270,13 +285,14 @@ public class CombatManager : MonoBehaviour
 
                 if (currentTeam[i].level == 3)
                 {
-                    CombatRewards.Instance.GeneratePassiveRewards(i);
+                    //CombatRewards.Instance.GeneratePassiveRewards(i);
                 }
-                
+
                 //GameManager.Instance.ChangeState(GameManager.GameState.passiveChoice);        
             }
         }
         GameManager.Instance.ChangeState(GameManager.GameState.combatReward);
+        playerGold += 5;
     }
 
     public void AddHero(GameObject hero)
