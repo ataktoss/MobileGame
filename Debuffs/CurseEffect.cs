@@ -11,7 +11,7 @@ public class CurseEffect : StatusEffect
         this.curseAmount = curseAmount;
     }
 
-    public override void OnAPply(Fighter target)
+    public override void OnApply(Fighter target)
     {
         
         damageModifier = (damage) => Mathf.CeilToInt(damage*curseAmount);

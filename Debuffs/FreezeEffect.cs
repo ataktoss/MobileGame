@@ -6,7 +6,7 @@ public class FreezeEffect: StatusEffect
         
     }
 
-    public override void OnAPply(Fighter target)
+    public override void OnApply(Fighter target)
     {
         Debug.Log(target.unitName + " Is now Frozen");
         target.isFrozen = true;

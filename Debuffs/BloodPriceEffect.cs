@@ -7,7 +7,7 @@ public class BloodPriceEffect:StatusEffect
         this.damagePerTurn = damagePerTurn;
     }
 
-    public override void OnAPply(Fighter target)
+    public override void OnApply(Fighter target)
     {
         //target.attackDamage = Mathf.RoundToInt(target.attackDamage * 1.1f);
         target.damageDoneModifiers.Add(damage => (int)(damage*1.1f));

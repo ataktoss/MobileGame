@@ -9,7 +9,7 @@ public class BurnEffect : StatusEffect
         this.damagePerTurn = damagePerTurn;
     }
 
-    public override void OnAPply(Fighter target)
+    public override void OnApply(Fighter target)
     {
         Debug.Log(target.unitName + " Is now burning");
     }

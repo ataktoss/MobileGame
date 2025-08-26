@@ -10,7 +10,7 @@ public class WeakenEffect : StatusEffect
         this.weakenAmount = weakenAmount;
     }
 
-    public override void OnAPply(Fighter target)
+    public override void OnApply(Fighter target)
     {
         
         damageModifier = (damage) => Mathf.CeilToInt(damage*weakenAmount);

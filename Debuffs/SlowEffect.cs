@@ -11,7 +11,7 @@ public class SlowEffect : StatusEffect
         //this.damagePerTurn = damagePerTurn;
     }
 
-    public override void OnAPply(Fighter target)
+    public override void OnApply(Fighter target)
     {
         savedSpeed = target.attackSpeed;
         target.attackSpeed  *= 2f;
