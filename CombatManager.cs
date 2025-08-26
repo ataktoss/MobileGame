@@ -11,7 +11,7 @@ public class HeroRuntimeData
 {
     public GameObject prefab; // The hero type (used to instantiate)
     public List<ItemData> equippedItems = new();
-    public List<Passive> passives = new();
+    [SerializeReference] public List<Passive> passives = new();
     public string nickname;
     public int level = 1;
     public int currentXP = 0;
@@ -52,7 +52,10 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    private float combatScale = 1;
+    private int currentAct = 1;
+    private int numberOfEncounters = 1;
+    private float enemyLifeScaling = 1f;
+    private float enemyDamageScaling = 1f;
 
     public int playerGold = 50;
 
@@ -185,6 +188,7 @@ public class CombatManager : MonoBehaviour
             UnityEngine.Debug.Log("THE CURRENT ENCOUNTER IS OF NORMAL TYPE");
         }
         //SET HEROES
+        SetTankFirst();
         for (int i = 0; i < currentTeam.Count && i < heroSpawnPoints.Count; i++)
         {
             GameObject prefab = currentTeam[i].prefab;
@@ -208,26 +212,108 @@ public class CombatManager : MonoBehaviour
             }
         }
         //SCALE ENEMIES
-        combatScale += 0.1f;
-        UnityEngine.Debug.Log("Combat scale is now: " + combatScale);
+
+        enemyLifeScaling += 0.18f;
+        enemyDamageScaling += 0.18f;
+        
+    }
+    private void SetTankFirst()
+    {
+        for (int i = 0; i < currentTeam.Count; i++)
+        {
+            if (currentTeam[i].prefab.GetComponent<Fighter>().fighterType == FighterType.Tank)
+            {
+                // Set the tank as the first fighter in the list
+                HeroRuntimeData tank = currentTeam[i];
+                currentTeam.RemoveAt(i);
+                currentTeam.Insert(0, tank);
+                UnityEngine.Debug.Log("Tank set as first fighter: " + tank.prefab.name);
+                break;
+            }
+            
+        }
     }
 
+    //this is triggered before the monster start method
     void ScaleMonsters(Fighter monster)
     {
         if (monster == null) return;
 
         // Scale the monster's stats based on the combat scale
-        monster.life = Mathf.RoundToInt(monster.life * combatScale);
-        monster.attackDamage = Mathf.RoundToInt(monster.attackDamage * combatScale);
-        
+        float actScaling = 1;
+        switch (currentAct)
+        {
+            case 1:
+                actScaling = 1f;
+                break;
+            case 2:
+                actScaling = 1.5f;
+                break;
+            case 3:
+                actScaling = 2f;
+                break;
+            
+            default:
+                actScaling = 1f;
+                break;
+        }
+        if (numberOfEncounters > 3)
+        {
+
+            monster.baseLife = Mathf.RoundToInt(monster.baseLife * enemyLifeScaling * actScaling * 1.5f);
+            UnityEngine.Debug.Log("The monsters base life is : " + monster.baseLife + " and their current life is now : " + monster.life);
+            monster.baseAttackDamage = Mathf.RoundToInt(monster.baseAttackDamage * enemyDamageScaling * 1.5f);
+        }
+        else
+        {
+            monster.baseLife = Mathf.RoundToInt(monster.baseLife * actScaling * enemyLifeScaling);
+            UnityEngine.Debug.Log("The monsters base life is : " + monster.baseLife + " and their current life is now : " + monster.life);
+            monster.baseAttackDamage = Mathf.RoundToInt(monster.baseAttackDamage * enemyDamageScaling);
+        }
 
         
     }
 
+    public Dictionary<string, int> damageDone = new();
+    [SerializeField] private TMPro.TextMeshProUGUI dpsText;
+    public void RegisterDamage(Fighter attacker, int amount)
+    {
+        if (attacker == null) return;
+
+        string key = attacker.unitName;
+        if (!damageDone.ContainsKey(key))
+        {
+            damageDone[key] = 0;
+        }
+            
+
+        damageDone[key] += amount;
+
+        UpdateDpsUI();
+
+
+    }
+    private void UpdateDpsUI()
+    {
+        if (dpsText == null) return;
+
+        string text = "Damage Done:\n";
+
+        // Order by value descending
+        foreach (var kvp in damageDone.OrderByDescending(x => x.Value))
+        {
+            text += $"{kvp.Key}: {kvp.Value}\n";
+        }
+
+        dpsText.text = text;
+    }
+
+
+
     void Start()
     {
         startCombatButton.onClick.AddListener(StartCombat);
-        AddHero(starterHeroprefab);
+        AddHero(CombatRewards.Instance.heroDatabase.GetRandomHero());
     }
 
 
@@ -257,6 +343,18 @@ public class CombatManager : MonoBehaviour
     public void StartCombat()
     {
 
+        foreach (var hero in heroes)
+        {
+            if (hero == null) continue;
+            hero.PrepareForCombat();
+        }
+        foreach (var monster in monsters)
+        {
+            if (monster == null) continue;
+            monster.PrepareForCombat();
+        }
+
+
         //GameManager.Instance.ChangeState(GameManager.GameState.Combat);
         combatLoop = StartCoroutine(UpdateCombatLoop());
         startCombatButton.gameObject.SetActive(false);
@@ -267,31 +365,45 @@ public class CombatManager : MonoBehaviour
         //StopCoroutine(combatLoop);
         foreach (var hero in heroes)
         {
-            if (hero.gameObject == null) continue;
+            if (!hero) continue;
             Destroy(hero.gameObject);
         }
         heroes.Clear();
         monsters.Clear();
 
-        for (int i = 0; i < currentTeam.Count; i++)
+        
+        if (currentEncounter.type == EncounterType.Boss)
         {
-            currentTeam[i].currentXP += 2;
-            if (currentTeam[i].currentXP >= 3) // Example level up condition
+            currentAct++;
+            UnityEngine.Debug.Log("Current Act: " + currentAct);
+            if (currentAct == 2)
             {
-                currentTeam[i].level++;
-                currentTeam[i].currentXP = 0; // Reset XP after leveling up
-                //UnityEngine.Debug.Log($"{currentTeam[i].prefab.GetComponent<Fighter>().unitName} leveled up to level {currentTeam[i].level}!");
-                currentTeam[i].prefab.GetComponent<Fighter>().LevelUp();
+                CombatRewards.Instance.GeneratePassives();
+                
+            }
+            
+            CombatRewards.Instance.choseBossItem();
+            MapUIManager.Instance.GenerateMap();
+            UnityEngine.Debug.Log("ENDING COMBAT AND RESETTING THE MAP");
+            
+            
+        }
 
-                if (currentTeam[i].level == 3)
-                {
-                    //CombatRewards.Instance.GeneratePassiveRewards(i);
-                }
-
-                //GameManager.Instance.ChangeState(GameManager.GameState.passiveChoice);        
+        GameManager.Instance.ChangeState(GameManager.GameState.combatReward); //Afto tha einai aplos gia background eno epilegeis items. Isos einai useless na iparxei 
+        if(currentEncounter.type == EncounterType.Normal || currentEncounter.type == EncounterType.Elite)
+        {
+            if (numberOfEncounters < 3)
+            {
+                CombatRewards.Instance.choseHero();
+            }
+            else
+            {
+                CombatRewards.Instance.choseItem();
             }
         }
-        GameManager.Instance.ChangeState(GameManager.GameState.combatReward);
+        
+        
+        numberOfEncounters++;
         playerGold += 5;
     }
 

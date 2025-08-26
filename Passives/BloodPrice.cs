@@ -2,8 +2,11 @@ using UnityEngine;
 
 public class BloodPrice : Passive,IEffect
 {
-    
-    public BloodPrice():base("Blood Price","Deal +10% damage but take 5 damage very 5 seconds"){}
+    //Gain 10% damage but take 5 damage every 5 seconds
+    public BloodPrice(PassiveData data) : base(data)
+    {
+
+    }
 
     public void Apply(Fighter caster, Fighter target)
     {

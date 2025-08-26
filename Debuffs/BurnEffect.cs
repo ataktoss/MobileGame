@@ -16,7 +16,7 @@ public class BurnEffect : StatusEffect
 
     public override void OnTimer(Fighter target)
     {
-        target.TakeDamage(damagePerTurn);
+        target.TakeDamage(damagePerTurn,target);
         Debug.Log(target.name + " Took " + damagePerTurn + " from ignite");
     }
 

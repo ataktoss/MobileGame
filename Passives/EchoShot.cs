@@ -24,10 +24,7 @@ public class EchoShot : Passive, IEffect
         
     }
 
-    public override void OnTakeDamage(Fighter fighter, int damage)
-    {
-        
-    }
+   
 
 
     public void Apply(Fighter caster, Fighter target)

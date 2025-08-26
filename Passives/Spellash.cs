@@ -28,10 +28,7 @@ public class Spellash : Passive, IEffect
         return damage + bonusDamage;
     }
 
-    public override void OnTakeDamage(Fighter fighter, int damage)
-    {
-
-    }
+    
 
 
     public void Apply(Fighter caster, Fighter target)

@@ -16,10 +16,13 @@ MonoBehaviour:
   description: +10 Life, +10 Attack speed
   icon: {fileID: 0}
   bonusAttackDamage: 0
-  bonusAttackSpeed: 0.1
+  bonusAttackSpeed: 0.15
   bonusSpellPower: 0
   bonusLife: 10
   bonusMana: 0
+  bonusCriticalChance: 0
+  bonusCriticalDamage: 0
   shopCost: 5
   shopSellValue: 0
+  itemEffects: []
   itemRarity: 0

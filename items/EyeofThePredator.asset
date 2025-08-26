@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f997475c17b0f4b90070a841eb4458, type: 3}
+  m_Name: EyeofThePredator
+  m_EditorClassIdentifier: 
+  itemName: EyeOfThePredator
+  description: +5% crit chance, +15% crit damage
+  icon: {fileID: 0}
+  bonusAttackDamage: 0
+  bonusAttackSpeed: 0
+  bonusSpellPower: 0
+  bonusLife: 0
+  bonusMana: 0
+  bonusCriticalChance: 0.05
+  bonusCriticalDamage: 0.15
+  shopCost: 0
+  shopSellValue: 0
+  itemEffects: []
+  itemRarity: 0

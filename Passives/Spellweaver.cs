@@ -27,10 +27,7 @@ public class Spellweaver : Passive, IEffect
     {
         return damage;
     }
-    public override void OnTakeDamage(Fighter fighter, int damage)
-    {
-
-    }
+    
 
 
     public void Apply(Fighter caster, Fighter target)

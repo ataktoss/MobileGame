@@ -13,7 +13,7 @@ public class Inspire: Passive
     {
         foreach(var hero in CombatManager.Instance.GetHeroList()){
             if(hero != fighter){
-                hero.attackSpeed *= 1.1f;
+                hero.attackSpeed /= 1.1f;
             }
         }
     }

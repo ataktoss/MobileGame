@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a8eb7b2db7331e47b71638a7301e625, type: 3}
+  m_Name: BerserkersTempo
+  m_EditorClassIdentifier: 
+  passiveName: BerserkersTempo
+  description: Gain 20% attack speed every 3 seconds
+  icon: {fileID: 21300000, guid: 38ee9519953d0ed4fa3ac8279ee1e0a1, type: 3}
+  type: 14

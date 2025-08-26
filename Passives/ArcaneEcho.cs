@@ -17,12 +17,9 @@ public class ArcaneEcho : Passive
         {
             extraDamage = dmgBonus(extraDamage);
         }
-        target.TakeDamage(extraDamage);
+        target.TakeDamage(extraDamage,fighter);
     }
-    public override void OnTakeDamage(Fighter fighter, int damage)
-    {
-        // No effect on taking damage
-    }
+    
     public override void ApplyEffect(Fighter fighter)
     {
         // No additional effect to apply

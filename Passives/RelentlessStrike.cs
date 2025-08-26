@@ -40,10 +40,7 @@ public class RelentlessStrikePassive : Passive, IEffect
         currentNumberAttack = 0;
     }
 
-    public override void OnTakeDamage(Fighter fighter, int damage)
-    {
-        
-    }
+    
 
 
     public void Apply(Fighter caster, Fighter target)

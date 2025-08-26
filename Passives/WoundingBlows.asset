@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a8eb7b2db7331e47b71638a7301e625, type: 3}
+  m_Name: WoundingBlows
+  m_EditorClassIdentifier: 
+  passiveName: WoundingBlows
+  description: On crit apply 10% damage taken debuff
+  icon: {fileID: 3326971659086699885, guid: 08461ee532e6388478a2e46ba7ac11b1, type: 3}
+  type: 32

@@ -14,9 +14,9 @@ public class ArcanePulse : Spell
         {
             if (enemy == null || !enemy.isAlive)
             {
-                continue; // Skip if the enemy is null or dead
+                continue; 
             }
-            enemy.TakeDamage(baseDamage);
+            enemy.TakeDamage(baseDamage,caster);
         }
     }
 }

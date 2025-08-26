@@ -21,7 +21,7 @@ public class HealOnDamagePassive : Passive
     }
 
 
-    public override void OnTakeDamage(Fighter fighter, int damage)
+    public override void OnTakeDamage(Fighter fighter,Fighter target, int damage)
     {
         //base.OnTakeDamage(fighter, damage);
         fighterLife = fighter._currentLife;

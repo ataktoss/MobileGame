@@ -14,7 +14,7 @@ public class Opportunist : Passive, IEffect
     {
         if(target.currentTarget != fighter)
         {
-            target.TakeDamage(Mathf.RoundToInt(damage * 0.2f));
+            target.TakeDamage(Mathf.RoundToInt(damage * 0.2f),fighter);
         }
     }
 
@@ -23,7 +23,7 @@ public class Opportunist : Passive, IEffect
         
     }
 
-    public override void OnTakeDamage(Fighter fighter, int damage)
+    public override void OnTakeDamage(Fighter fighter,Fighter attacker, int damage)
     {
         
     }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -28,12 +29,27 @@ public class ItemData : ScriptableObject
     public float bonusCriticalDamage;
     public int shopCost;
     public int shopSellValue;
-    
 
+    public List<ItemEffect> itemEffects;
     public ItemRarity itemRarity;
 
-
-    public virtual void OnEquip(Fighter fighter){}
+    public void RunBeforeAttack(Fighter fighter,Fighter target,int damage,bool isCrit){
+        foreach(var effect in itemEffects){
+            effect.OnBeforeAttack(fighter, target, damage, isCrit);
+        }
+    }
+    public void RunAfterAttack(Fighter fighter,Fighter target,int damage,bool isCrit){
+        foreach(var effect in itemEffects){
+            effect.OnAfterAttack(fighter, target, damage, isCrit);
+        }
+    }
+    public void OnSpellCast(Fighter fighter,Fighter target,int damage,int spellPower){
+        foreach(var effect in itemEffects){
+            effect.OnSpellCast(fighter, target, spellPower);
+        }
+    }
+    
+    public virtual void OnEquip(Fighter fighter) { }
 
     public virtual void OnAttack(Fighter fighter){}
 

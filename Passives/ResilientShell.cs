@@ -24,6 +24,7 @@ public class ResilientShell : Passive, IEffect
         currentAmountOfHitsTaken++;
         if (currentAmountOfHitsTaken >= 4)
         {
+            currentAmountOfHitsTaken = 0; // Reset the counter after blocking
             return 0;
         }
         else
@@ -34,10 +35,7 @@ public class ResilientShell : Passive, IEffect
 
     }
 
-    public override void OnTakeDamage(Fighter fighter, int damage)
-    {
-
-    }
+    
 
 
     public void Apply(Fighter caster, Fighter target)

@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
         // combatPanel.SetActive(false);
         // shopPanel.SetActive(false);
         // rewardPanel.SetActive(true);
-        CombatRewards.Instance.choseReward();
+        // CombatRewards.Instance.choseReward();
         Debug.Log("Generating reward buttons");
     }
 

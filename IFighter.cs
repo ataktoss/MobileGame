@@ -28,6 +28,7 @@ public class Fighter : MonoBehaviour
 
     public int attackRange;
     public float movementSpeed = 5f;
+    public int baseAttackDamage;
     public int attackDamage;
 
     //Default spellPower 0 kai aplos pernei added apo items + spells + alla chars. Reset on combat start
@@ -43,12 +44,12 @@ public class Fighter : MonoBehaviour
 
     //STATS AFTER ITEM APPLICATIONS
 
-    public float TotalAttackSpeed => attackSpeed * (1 + equipedItems.Sum(item => item.bonusAttackSpeed));
+    public float TotalAttackSpeed => attackSpeed / (1 + equipedItems.Sum(item => item.bonusAttackSpeed));
     public int TotalSpellPower => spellPower + equipedItems.Sum(item => item.bonusSpellPower);
     public int TotalLife => baseLife + equipedItems.Sum(item => item.bonusLife);
     public float TotalCriticalChance => critChance + equipedItems.Sum(item => item.bonusCriticalChance);
     public float TotalCriticalDamage => critDamage + equipedItems.Sum(item => item.bonusCriticalDamage);
-
+    public int TotalAttackDamage => attackDamage + equipedItems.Sum(item => item.bonusAttackDamage);
 
     private float lastEffectTick;
 
@@ -69,7 +70,7 @@ public class Fighter : MonoBehaviour
     //DAMAGE DONE MODIFIER
     public List<Func<int, int>> damageDoneModifiers = new List<Func<int, int>>();
     public List<ItemData> equipedItems = new List<ItemData>();
-
+    public List<ItemEffect> itemEffects = new List<ItemEffect>();
 
     //Events
     public event Action<int> OnHealthChanged;
@@ -80,7 +81,7 @@ public class Fighter : MonoBehaviour
     public event Action<int> OnSpellCast;
     //public event Action<int> OnCrit;
     public event Action OnDeath;
-
+    public ParticleSystem spellEffect;
 
 
 
@@ -88,7 +89,7 @@ public class Fighter : MonoBehaviour
     private Coroutine attackCoroutine;
 
 
-    public void TakeDamage(int amount)
+    public void TakeDamage(int amount,Fighter attacker)
     {
 
         if (this.gameObject != null)
@@ -104,13 +105,15 @@ public class Fighter : MonoBehaviour
             }
 
             _currentLife -= amount;
+            CombatManager.Instance.RegisterDamage(attacker, amount);
+            //Debug.Log($"{unitName} took {amount} damage! from {attacker.unitName}");
 
             OnHealthChanged?.Invoke(_currentLife);
             OnTakeDamage?.Invoke(amount);
 
             foreach (var passive in passives)
             {
-                passive.OnTakeDamage(this, amount); // <- tell passives
+                passive.OnTakeDamage(this,attacker, amount); // <- tell passives
             }
             if (_currentLife <= 0)
             {
@@ -119,32 +122,19 @@ public class Fighter : MonoBehaviour
                 {
                     passive.OnDeath(this); // <- tell passives
                 }
-                Debug.Log(unitName + " has died!" + "by taking damage of " + amount);
-                isAlive = false;
-                isAttacking = false;
-                StopAllCoroutines();
-                this.enabled = false;
-                Destroy(this.gameObject);
+                Die();
             }
         }
     }
 
     public void Die()
     {
-        if (!isAlive) return; // prevent double death
-
+        //Debug.Log(unitName + " has died!");
         isAlive = false;
-        StopAllCoroutines(); // optional if you're running anything
-
-        // Disable behavior
+        isAttacking = false;
         this.enabled = false;
+        StopAllCoroutines();
         Destroy(this.gameObject);
-
-        // Optionally disable visuals/collider/etc.
-        //GetComponent<Collider2D>()?.enabled = false;
-
-        // Play death animation or delay actual destruction
-        StartCoroutine(DelayedDeath());
     }
     IEnumerator DelayedDeath()
     {
@@ -181,14 +171,21 @@ public class Fighter : MonoBehaviour
 
     private IEnumerator AttackRoutine()
     {
+        float timer = 0f;
         while (isAttacking)
         {
-            yield return new WaitForSeconds(TotalAttackSpeed);
-            //Debug.Log("My attack speed is : " + TotalAttackSpeed + "NAME OF UNIT: " + this.unitName);
-            if (currentTarget != null)
+            timer += Time.deltaTime;
+            if (timer >= 1f / TotalAttackSpeed)
             {
-                Attack(currentTarget, attackDamage);
+                timer = 0f;
+                // Attack the target
+                if (currentTarget != null)
+                {
+                    Attack(currentTarget, TotalAttackDamage);
+                }
             }
+
+            yield return null;
 
         }
 
@@ -199,19 +196,30 @@ public class Fighter : MonoBehaviour
 
     public void Attack(Fighter target, int damage)
     {
-        //Debug.Log("" + unitName + " attacked " + target.unitName + " for " + damage + " damage! BEFORE DAMAGE MODIFIERS");
+        
         if (isFrozen) return;
+
+        if (fighterSpell != null && _currentMana >= fighterSpell.manaCost)
+        {
+            ChangeMana(-fighterSpell.manaCost);
+            CastSpell(fighterSpell, currentTarget);
+        }
+
         bool isCrit = UnityEngine.Random.value < TotalCriticalChance;
         int finalDamage = damage;
         if (isCrit)
         {
             finalDamage = (int)(damage * TotalCriticalDamage);
-            Debug.Log("CRITICAL HIT!");
+            //Debug.Log("CRITICAL HIT!");
         }
 
         foreach (var passive in passives)
         {
-            finalDamage = passive.ModifyDamageTaken(this, finalDamage); 
+            finalDamage = passive.ModifyDamageDone(this,currentTarget, finalDamage);
+            if (isCrit)
+            {
+                passive.OnCrit(this, target, finalDamage, isCrit);
+            }
         }
         foreach (var mod in damageDoneModifiers)
         {
@@ -219,9 +227,6 @@ public class Fighter : MonoBehaviour
         }
 
 
-        //Debug.Log(unitName + " attacked for " + damage + " damage!" );
-
-        // ✨ Fire event
         OnAttackPerformed?.Invoke();
 
 
@@ -230,14 +235,23 @@ public class Fighter : MonoBehaviour
         {
             passive.OnAttack(this, target, damage); // <- tell passives
         }
-        // foreach (var mod in damageDoneModifiers)
-        // {
-        //     finalDamage = mod(finalDamage);
-        // }
 
-        target.TakeDamage(finalDamage);
-        Debug.Log("" + unitName + " attacked " + target.unitName + " for " + finalDamage + " damage After damage mods");
-        //Debug.Log(unitName + "current damage is : " + attackDamage);
+        
+        foreach (var itemEffect in itemEffects)
+        {
+            finalDamage = itemEffect.OnBeforeAttack(this, target, finalDamage, isCrit);
+        }
+        
+        // ITEM BEFORE ATTACK HERE
+
+        target.TakeDamage(finalDamage,this);
+        //Debug.Log("" + unitName + " attacked " + target.unitName + " for " + finalDamage + " damage After damage mods");
+
+        //ITEM AFTER ATTACK HERE
+        foreach (var itemEffect in itemEffects)
+        {
+            itemEffect.OnAfterAttack(this, target, finalDamage, isCrit);
+        }
         ChangeMana(manaGainedFromHits);
 
 
@@ -248,8 +262,17 @@ public class Fighter : MonoBehaviour
         if (isFrozen) return;
         if (isSilenced) return;
 
+        if(spellEffect != null)
+        {
+            spellEffect.Play();
+        }
+        Debug.Log($"{this.unitName} is casting {spell.name}");
         spell.ApplyEffect(this, target, TotalSpellPower);
         OnSpellCast?.Invoke(spell.manaCost);
+        foreach(var itemEffect in itemEffects)
+        {
+            itemEffect.OnSpellCast(this, target, this.spellPower);
+        }
     }
 
     public void ChangeMana(int amount)
@@ -261,11 +284,7 @@ public class Fighter : MonoBehaviour
 
         // Mana Event
         OnManaChanged?.Invoke(_currentMana);
-        if (fighterSpell != null && _currentMana >= fighterSpell.manaCost)
-        {
-            _currentMana -= fighterSpell.manaCost;
-            CastSpell(fighterSpell, currentTarget);
-        }
+        
         _isProcessingManaChange = false;
 
     }
@@ -299,9 +318,14 @@ public class Fighter : MonoBehaviour
     {
         passives.Add(newPassive);
 
-        Debug.Log($"{unitName} gained passive: {newPassive.passiveName}");
-        Debug.Log("Attack speed is now : " + attackSpeed);
-        Debug.Log("THIS UNIT NOW HAS " + passives.Count + " PASSIVES");
+        foreach(var passive in passives)
+        {
+            Debug.Log("The hero :" + unitName + " has passive: " + passive.passiveName);
+        }
+
+        // Debug.Log($"{unitName} gained passive: {newPassive.passiveName}");
+        // Debug.Log("Attack speed is now : " + attackSpeed);
+        // Debug.Log("THIS UNIT NOW HAS " + passives.Count + " PASSIVES");
     }
 
     // BUFFS KAI DEBUFFS HERE
@@ -360,7 +384,7 @@ public class Fighter : MonoBehaviour
         for (int i = passives.Count - 1; i >= 0; i--)
         {
             passives[i].ApplyEffect(this);
-            Debug.Log("Enabling passive: " + passives[i].passiveName + " for fighter: ✅" + unitName);
+            //Debug.Log("Enabling passive: " + passives[i].passiveName + " for fighter: ✅" + unitName);
         }
     }
 
@@ -380,10 +404,10 @@ public class Fighter : MonoBehaviour
 
 
 
-        life += Mathf.RoundToInt(life * 0.1f);
-        Debug.Log(unitName + " just leveled up! New life: " + life);
-        attackDamage += Mathf.RoundToInt(attackDamage * 0.1f);
-        attackSpeed += attackSpeed * 0.1f;
+        // life += Mathf.RoundToInt(life * 0.1f);
+        // //Debug.Log(unitName + " just leveled up! New life: " + life);
+        // attackDamage += Mathf.RoundToInt(attackDamage * 0.1f);
+        // attackSpeed += attackSpeed * 0.1f;
 
 
         //GENERATE PASSIVE CHOICE
@@ -400,10 +424,11 @@ public class Fighter : MonoBehaviour
                 critChance += 0.1f; 
                 break;
             case FighterType.Mage:
-                manaGainedFromHits += 5;
+                //manaGainedFromHits += 5;
+                spellPower += 20;
                 break;
             case FighterType.Fighter:
-                AddPassive(new LeechingBlows(0.1f));
+                //AddPassive(new LeechingBlows(0.1f));
                 break;
             case FighterType.Tank:
                 // Reduced damage taken buffby some sort
@@ -427,10 +452,11 @@ public class Fighter : MonoBehaviour
 
     public void PrepareForCombat()
     {
+        attackDamage = baseAttackDamage;
         attackSpeed = baseAttackSpeed;
         spellPower = 0;
-        critChance = basecritChance; 
-        critDamage = basecritDamage; 
+        critChance = basecritChance;
+        critDamage = basecritDamage;
         life = TotalLife; // BASE LIFE + ITEMS
         SetStatsFromType(fighterType);
         enableAllPassives();
@@ -444,14 +470,21 @@ public class Fighter : MonoBehaviour
         damageDoneModifiers.Clear();
         damageTakenModifiers.Clear();
         activeEffects.Clear();
+        foreach (var item in equipedItems)
+        {
+            foreach (var itemEffect in item.itemEffects)
+            {
+                itemEffects.Add(itemEffect);
+            }
+        }
 
-        Debug.Log($"{unitName} is prepared for combat with {TotalLife} life and {mana} mana.");
+        //Debug.Log($"{unitName} is prepared for combat with {TotalLife} life and {mana} mana.");
     }
 
     public void Start()
     {
-        PrepareForCombat();
-        Debug.Log($"{unitName} just used the Start Function");
+        //PrepareForCombat();
+        //Debug.Log($"{unitName} just used the Start Function");
 
 
     }

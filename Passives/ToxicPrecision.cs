@@ -13,8 +13,9 @@ public class ToxicPrecision : Passive, IEffect
         bool isCrit = UnityEngine.Random.value < fighter.TotalCriticalChance;
         if (isCrit)
         {
-            target.ApplyDebuff(new PoisonEffect(Mathf.RoundToInt(fighter.attackDamage * 0.2f), 3, 2)); 
+            target.ApplyDebuff(new PoisonEffect(Mathf.RoundToInt(fighter.TotalAttackDamage * 0.2f), 3, 1));
         }
+        
     }
 
     public override void OnSpellCast(Fighter fighter, int manaCost)
@@ -27,10 +28,7 @@ public class ToxicPrecision : Passive, IEffect
         return damage; 
     }
 
-    public override void OnTakeDamage(Fighter fighter, int damage)
-    {
-
-    }
+   
 
 
     public void Apply(Fighter caster, Fighter target)

@@ -13,6 +13,6 @@ public class SpellWeaverSpell : Spell
         {
             return;
         }
-        target.TakeDamage(spellDamage);
+        target.TakeDamage(spellDamage,caster);
     }
 }

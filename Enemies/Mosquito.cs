@@ -4,6 +4,8 @@ public class Mosquito : Fighter
 {
     void Awake()
     {
-        AddPassive(new LeechingBlows(0.3f));
+        PassiveData data = CombatManager.Instance.passiveDatabase.allPassives.Find(p => p.type == PassiveType.BloodFeast);
+        Passive logic = PassiveFactory.Create(data);
+        AddPassive(logic);
     }
 }

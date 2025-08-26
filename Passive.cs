@@ -38,8 +38,9 @@ public abstract class Passive
         // Default implementation does nothing
         return damage;
     }
-    public virtual void OnTakeDamage(Fighter fighter, int damage) { }
+    public virtual void OnTakeDamage(Fighter fighter,Fighter attacker, int damage) { }
     public virtual void OnAttack(Fighter fighter, Fighter target, int damage) { }
+    public virtual void OnCrit(Fighter fighter,Fighter target,int damage, bool isCritical) { }
     public virtual void OnSpellCast(Fighter fighter, int manaCost) { }
     public virtual void OnDeath(Fighter fighter) { }
 }

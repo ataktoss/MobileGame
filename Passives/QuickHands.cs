@@ -6,6 +6,6 @@ public class QuickHands : Passive
 
     public override void ApplyEffect(Fighter fighter)
     {
-        fighter.attackSpeed *= 1.2f;
+        fighter.attackSpeed *= 0.8f;
     }
 }

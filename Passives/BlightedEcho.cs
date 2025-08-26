@@ -3,9 +3,10 @@ using UnityEngine;
 public class BlightedEcho : Passive, IEffect
 {
 
-    public BlightedEcho():base("Blighted Echo","Chance on hit to silence"){}
+    public BlightedEcho(PassiveData data) : base(data)
+    {
 
-
+    }
 
     public override void OnAttack(Fighter fighter, Fighter target, int damage)
     {

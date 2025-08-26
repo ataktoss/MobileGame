@@ -22,7 +22,7 @@ public class Spell
         foreach(var weaken in target.damageDoneModifiers){
             finalDamage = weaken(finalDamage);
         }
-        target.TakeDamage(finalDamage);
+        target.TakeDamage(finalDamage,caster);
         Debug.Log(target.name + " Took " + damage + "Damage");
 
         foreach(var effect in additionalEffects){

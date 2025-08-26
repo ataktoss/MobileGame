@@ -1,12 +1,13 @@
+using System;
 using UnityEngine;
 
 public class PoisonHits : Passive, IEffect
 {
     
-    public int poisonDamage;
+    
 
-    public PoisonHits(int poisonDamage):base("Poison Hits","On hit poison the enemy"){
-        this.poisonDamage = poisonDamage;
+    public PoisonHits(PassiveData data):base(data){
+        
     }
 
     public void Apply(Fighter caster, Fighter target)
@@ -21,7 +22,7 @@ public class PoisonHits : Passive, IEffect
 
     public override void OnAttack(Fighter fighter, Fighter target, int damage)
     {
-        int theDamage = fighter.attackDamage;
+        int theDamage = Mathf.RoundToInt(fighter.TotalAttackDamage*0.2f/3);
         target.ApplyDebuff(new PoisonEffect(theDamage,2,1));
     }
 

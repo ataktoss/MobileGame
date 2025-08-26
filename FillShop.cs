@@ -8,6 +8,7 @@ public class FillShop : MonoBehaviour
 {
     //public List<ItemData> itemsToFill;
     public ItemDatabase itemDatabase;
+    public ItemDatabase bossItemDatabase;
     public List<Button> getItemButtons;
     public List<Image> itemIcons;
     public List<TMP_Text> itemNames;
@@ -23,25 +24,26 @@ public class FillShop : MonoBehaviour
 
         // Get random items from the database
         List<ItemData> allItems = itemDatabase.GetRandomItems(numberOfItemsInShop);
-        // for (int i = 0; i < numberOfItemsInShop; i++)
-        // {
-        //     //POSSIBLE IF STATEMENT FOR EXAMPLE IF EPIC ITEM THEN SHOW EPIC BORDER
-
-        //     getItemButtons[i].onClick.AddListener(() => OnGetItemButtonClicked(allItems[i]));
-        //     //itemIcons[i].sprite = allItems[i].icon;
-        //     itemNames[i].text = allItems[i].itemName;
-        //     itemDescriptions[i].text = allItems[i].description;
-
-        // }
+        List<ItemData> bossItems = bossItemDatabase.GetRandomItems(1);
+        
         for (int i = 0; i < numberOfItemsInShop; i++)
         {
             int index = i;
+            List<ItemData> currentList = new();
+            if (index == 0)
+            {
+                currentList = bossItems;
+            }
+            else
+            {
+                currentList = allItems;
+            }
 
             getItemButtons[index].onClick.RemoveAllListeners();
-            getItemButtons[index].onClick.AddListener(() => OnGetItemButtonClicked(allItems[index]));
+            getItemButtons[index].onClick.AddListener(() => OnGetItemButtonClicked(currentList[index]));
 
-            itemNames[index].text = allItems[index].itemName;
-            itemDescriptions[index].text = allItems[index].description;
+            itemNames[index].text = currentList[index].itemName;
+            itemDescriptions[index].text = currentList[index].description;
         }
         
     }

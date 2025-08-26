@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class WeakenEffect : StatusEffect
 {
+    //Enemy does % less damage 
     public float weakenAmount;
     private Func<int, int> damageModifier;
 
@@ -14,12 +15,12 @@ public class WeakenEffect : StatusEffect
     {
         
         damageModifier = (damage) => Mathf.CeilToInt(damage*weakenAmount);
-        target.damageTakenModifiers.Add(damageModifier);
-        Debug.Log($"{target.unitName} is Weakened! and now deals " + weakenAmount + " less damage ");
+        target.damageDoneModifiers.Add(damageModifier);
+        Debug.Log($"{target.unitName} is Weakened! and now does " + weakenAmount + " less damage ");
 
 
         
-        Debug.Log(target.unitName + " Is now Cursed");
+        
         
     }
 

@@ -22,7 +22,7 @@ public class IronSkin : Passive, IEffect
         
     }
 
-    public override void OnTakeDamage(Fighter fighter, int damage)
+    public override void OnTakeDamage(Fighter fighter,Fighter attacker, int damage)
     {
         
     }

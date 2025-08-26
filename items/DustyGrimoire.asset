@@ -17,9 +17,12 @@ MonoBehaviour:
   icon: {fileID: 0}
   bonusAttackDamage: 0
   bonusAttackSpeed: 0
-  bonusSpellPower: 20
+  bonusSpellPower: 40
   bonusLife: 0
   bonusMana: 0
+  bonusCriticalChance: 0
+  bonusCriticalDamage: 0
   shopCost: 5
   shopSellValue: 0
+  itemEffects: []
   itemRarity: 0

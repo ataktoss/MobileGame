@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class RotBurst : Passive, IEffect
 {
-    public int explodeAmount;
+    //Explode on death dealing 15% of life to all enemies
 
-    public RotBurst(int explodeAmount):base("RotBurst","Explode on Death"){
-        this.explodeAmount = explodeAmount;
+    public RotBurst(PassiveData data):base(data){
+        
     }
 
 
@@ -20,10 +20,7 @@ public class RotBurst : Passive, IEffect
         
     }
 
-    public override void OnTakeDamage(Fighter fighter, int damage)
-    {
-        
-    }
+    
 
 
     public void Apply(Fighter caster, Fighter target)
@@ -38,10 +35,10 @@ public class RotBurst : Passive, IEffect
     public override void OnDeath(Fighter fighter)
     {
         foreach(Fighter aliveHero in CombatManager.Instance.GetHeroList()){
-            Debug.Log("Got HERO LIST READY TO EXPLODE");
-            if(aliveHero.isAlive){
-                aliveHero.TakeDamage(explodeAmount);
-                Debug.Log("Exploded on : " + aliveHero.name + " For damage : " + explodeAmount);
+            
+            if(aliveHero.isAlive &&  aliveHero!= null){
+                aliveHero.TakeDamage(Mathf.RoundToInt(aliveHero.TotalLife*0.15f),fighter);
+                
             }
             
         }

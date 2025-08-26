@@ -4,6 +4,8 @@ public class Explodey : Fighter
 {
     void Awake()
     {
-        AddPassive(new RotBurst(30));
+        PassiveData data = CombatManager.Instance.passiveDatabase.allPassives.Find(p => p.type == PassiveType.RotBurst);
+        Passive logic = PassiveFactory.Create(data);
+        AddPassive(logic);
     }
 }

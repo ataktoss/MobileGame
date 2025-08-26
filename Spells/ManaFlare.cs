@@ -21,7 +21,7 @@ public class ManaFlare : Spell
                 continue; // Skip if the enemy is null or dead
             }
             // Apply damage to all enemies except the target
-            enemy.TakeDamage(finalDamage);
+            enemy.TakeDamage(finalDamage,target);
         }
         
     }

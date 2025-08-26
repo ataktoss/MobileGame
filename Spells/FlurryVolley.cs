@@ -20,7 +20,7 @@ public class FlurryVolley : Spell
                 continue; // Skip if the enemy is null or dead
             }
             // Apply damage to all enemies except the target
-            enemy.TakeDamage(spellDamage);
+            enemy.TakeDamage(spellDamage,caster);
         }
     }
 

@@ -9,11 +9,11 @@ public class Deflect: Passive
         
     }
 
-    public override void OnTakeDamage(Fighter fighter, int damage)
+    public override void OnTakeDamage(Fighter fighter,Fighter attacker, int damage)
     {
         if(Random.value <0.10f){
             if(fighter.currentTarget != null){
-                fighter.currentTarget.TakeDamage(damage);
+                fighter.currentTarget.TakeDamage(damage,fighter);
             }
         }
     }

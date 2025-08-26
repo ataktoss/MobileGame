@@ -10,7 +10,7 @@ public class AttackSpeedBuff : StatusEffect
 
     public override void OnApply(Fighter target)
     {
-        target.attackSpeed = Mathf.RoundToInt(target.attackSpeed * (1+attackSpeedModifier));
+        target.attackSpeed = Mathf.RoundToInt(target.attackSpeed / (1+attackSpeedModifier));
         Debug.Log(target.unitName + " Now has modified attack speed");
     }
 
@@ -21,7 +21,11 @@ public class AttackSpeedBuff : StatusEffect
 
     public override void OnExpire(Fighter target)
     {
-        target.attackSpeed = Mathf.RoundToInt(target.attackSpeed/(1+attackSpeedModifier));
+        if(target == null || !target.isAlive)
+        {
+            return;
+        }
+        target.attackSpeed = Mathf.RoundToInt(target.attackSpeed*(1+attackSpeedModifier));
         Debug.Log(target.name + " no longer has modified attack speed");
     }
 

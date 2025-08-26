@@ -5,7 +5,9 @@ public class Spider : Fighter
 
     void Awake()
     {
-        AddPassive(new PoisonHits(5));
+        PassiveData data = CombatManager.Instance.passiveDatabase.allPassives.Find(p => p.type == PassiveType.BerserkersTempo);
+        Passive logic = PassiveFactory.Create(data);
+        AddPassive(logic);
     }
 
 }

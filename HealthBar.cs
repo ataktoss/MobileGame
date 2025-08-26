@@ -20,7 +20,11 @@ public class HealthBar : MonoBehaviour
         
         
         if(fighter != null){
-            fillImage.fillAmount = (float)fighter._currentLife/ fighter.life;
+            if (fighter.life > 0)
+            {
+                fillImage.fillAmount = (float)fighter._currentLife/ fighter.life;
+            }
+            
             
             
         }

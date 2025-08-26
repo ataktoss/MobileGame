@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class FirstAidBuff : StatusEffect
 {
-    public int healPerTurn;
+    public float healPerTurn;
 
-    public FirstAidBuff(int healPerTurn, int duration, int howOften): base("FirstAidBuff",duration,howOften,StatusEffectType.Buff){
+    public FirstAidBuff(float healPerTurn, int duration, int howOften): base("FirstAidBuff",duration,howOften,StatusEffectType.Buff){
         this.healPerTurn = healPerTurn;
     }
 
@@ -25,7 +25,7 @@ public class FirstAidBuff : StatusEffect
             }
         }
         if(lowestHPHero != null){
-            lowestHPHero.Heal(Mathf.RoundToInt(lowestHPHero.life * 0.05f));
+            lowestHPHero.Heal(Mathf.RoundToInt(lowestHPHero.TotalLife * healPerTurn));
         }
     }
 

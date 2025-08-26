@@ -15,11 +15,13 @@ MonoBehaviour:
   itemName: ABetterWoodenStick
   description: +10 to all stats
   icon: {fileID: 0}
-  bonusAttackDamage: 0
+  bonusAttackDamage: 2
   bonusAttackSpeed: 0.15
   bonusSpellPower: 10
   bonusLife: 10
   bonusMana: 0
+  bonusCriticalChance: 0.05
+  bonusCriticalDamage: 0.1
   shopCost: 5
   shopSellValue: 0
   itemRarity: 0

@@ -20,18 +20,30 @@ public abstract class StatusEffect
         this.effectType = type;
     }
 
-    public void TryTick(Fighter target){
-        if(Time.time>= lastTickTime + howOften){
+    
+    public void TryTick(Fighter target)
+    {
+        while(Time.time>= lastTickTime + howOften){
             OnTimer(target);
             duration--;
             lastTickTime = Time.time;
         }
+
+        
+
+        
+
     }
 
 
     //On apply should trigger once by meaning on application of the buff/debuff
     public virtual void OnApply(Fighter target){}
-    public virtual void OnTimer(Fighter target){}
+    public virtual int ChangeAttack(Fighter target, int damage)
+    {
+        return damage;
+    }
+    public virtual void OnAttack(Fighter attacker, int damage){}
+    public virtual void OnTimer(Fighter target) { }
     public virtual void OnExpire(Fighter target){}
 
     

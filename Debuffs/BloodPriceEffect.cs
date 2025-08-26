@@ -15,7 +15,7 @@ public class BloodPriceEffect:StatusEffect
 
     public override void OnTimer(Fighter target)
     {
-        target.TakeDamage(damagePerTurn);
+        target.TakeDamage(damagePerTurn,target);
     }
 
 

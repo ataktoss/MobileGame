@@ -14,7 +14,7 @@ public class BladeStormFlurry : Spell
             {
                 continue; // Skip if the enemy is null or dead
             }
-            caster.Attack(enemy, caster.attackDamage);
+            caster.Attack(enemy, caster.TotalAttackDamage);
             
         }
     }

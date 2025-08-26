@@ -30,6 +30,7 @@ public class Team : MonoBehaviour
         List<HeroRuntimeData> heroesData = CombatManager.Instance.GetCurrentTeamInfo();
         if (heroesData[0] != null)
         {
+            HeroRuntimeData hero1Data = heroesData[0];
             showingHeroes = true;
             heroHolder1.SetActive(true);
             GameObject heroInstance = Instantiate(heroesData[0].prefab);
@@ -37,10 +38,18 @@ public class Team : MonoBehaviour
             heroname1.text = fighterRef.unitName;
             hero1Passive1Text.text = fighterRef.passives[0].passiveName;
             hero1Passive1Icon.sprite = fighterRef.passives[0].icon;
-            hero1SpellText.text = fighterRef.fighterSpell.name;
+
+
+            if (hero1Data.passives.Count > 0)
+            {
+                Debug.Log("THE HERO HAS A SECOND PASSIVE");
+                hero1Passive2Icon.sprite = hero1Data.passives[0].icon;
+            }
+            
+            //hero1SpellText.text = fighterRef.fighterSpell.name;
             for (int i = 0; i < heroesData[0].equippedItems.Count; i++)
             {
-                hero1Relics[i].text = heroesData[0].equippedItems[i].itemName;
+                //hero1Relics[i].text = heroesData[0].equippedItems[i].itemName;
             }
             Destroy(heroInstance);
         }
@@ -52,6 +61,11 @@ public class Team : MonoBehaviour
             heroName2.text = fighterRef2.unitName;
             hero2Passive1Text.text = fighterRef2.passives[0].passiveName;
             hero2SpellText.text = fighterRef2.fighterSpell.name;
+            hero2Passive1Icon.sprite = fighterRef2.passives[0].icon;
+            if (heroesData[1].passives.Count > 1)
+            {
+                hero2Passive2Icon.sprite = heroesData[1].passives[0].icon;
+            }
             Destroy(heroInstance2);
         }
         if (heroesData.Count > 2 && heroesData[2] != null)
@@ -62,6 +76,11 @@ public class Team : MonoBehaviour
             heroName3.text = fighterRef3.unitName;
             hero3Passive1Text.text = fighterRef3.passives[0].passiveName;
             hero3SpellText.text = fighterRef3.fighterSpell.name;
+            hero3Passive1Icon.sprite = fighterRef3.passives[0].icon;
+            if (heroesData[2].passives.Count > 1)
+            {
+                hero3Passive2Icon.sprite = heroesData[2].passives[0].icon;
+            }
             Destroy(heroInstance3);
         }
 
