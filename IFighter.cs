@@ -262,16 +262,20 @@ public class Fighter : MonoBehaviour
         if (isFrozen) return;
         if (isSilenced) return;
 
-        if(spellEffect != null)
+        if (spellEffect != null)
         {
             spellEffect.Play();
         }
         Debug.Log($"{this.unitName} is casting {spell.name}");
         spell.ApplyEffect(this, target, TotalSpellPower);
         OnSpellCast?.Invoke(spell.manaCost);
-        foreach(var itemEffect in itemEffects)
+        foreach (var itemEffect in itemEffects)
         {
             itemEffect.OnSpellCast(this, target, this.spellPower);
+        }
+        foreach (var passive in passives)
+        {
+            passive.OnSpellCast(this, spell.manaCost); // <- tell passives
         }
     }
 

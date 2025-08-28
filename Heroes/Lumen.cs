@@ -4,7 +4,7 @@ public class Lumen : Fighter
 {
     void Awake()
     {
-        PassiveData data = CombatManager.Instance.passiveDatabase.allPassives.Find(p => p.type == PassiveType.AdrenalineRush);
+        PassiveData data = CombatManager.Instance.passiveDatabase.allPassives.Find(p => p.type == PassiveType.ArcaneBattery);
         Passive logic = PassiveFactory.Create(data);
         AddPassive(logic);
         //AddPassive(new FirstAid());

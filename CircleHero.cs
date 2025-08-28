@@ -1,7 +1,4 @@
-using Unity.VisualScripting;
-using UnityEditor.Scripting;
-using UnityEngine;
-using UnityEngine.Rendering.Universal;
+using System.Collections;
 
 public class CircleHero: Fighter
 {

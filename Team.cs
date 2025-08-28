@@ -12,6 +12,7 @@ public class Team : MonoBehaviour
     public GameObject heroHolder1, heroHolder2, heroHolder3;
     public TMP_Text heroname1, heroName2, heroName3;
     public Button hero1Passive1, hero1Passive2, hero2Passive1, hero2Passive2, hero3Passive1, hero3Passive2;
+    //public Button hero1PassiveInfo, hero2PassiveInfo, hero3PassiveInfo;
     public Image hero1Passive1Icon, hero1Passive2Icon, hero2Passive1Icon, hero2Passive2Icon, hero3Passive1Icon, hero3Passive2Icon;
     public TMP_Text hero1Passive1Text, hero1Passive2Text, hero2Passive1Text, hero2Passive2Text, hero3Passive1Text, hero3Passive2Text;
     public Button hero1Spell, hero2Spell, hero3Spell;
@@ -36,9 +37,9 @@ public class Team : MonoBehaviour
             GameObject heroInstance = Instantiate(heroesData[0].prefab);
             Fighter fighterRef = heroInstance.GetComponent<Fighter>();
             heroname1.text = fighterRef.unitName;
-            hero1Passive1Text.text = fighterRef.passives[0].passiveName;
+            hero1Passive1Text.text = fighterRef.passives[0].description;
             hero1Passive1Icon.sprite = fighterRef.passives[0].icon;
-
+            //hero1SpellText.text = fighterRef.fighterSpell.name;
 
             if (hero1Data.passives.Count > 0)
             {
@@ -59,9 +60,10 @@ public class Team : MonoBehaviour
             GameObject heroInstance2 = Instantiate(heroesData[1].prefab);
             Fighter fighterRef2 = heroInstance2.GetComponent<Fighter>();
             heroName2.text = fighterRef2.unitName;
-            hero2Passive1Text.text = fighterRef2.passives[0].passiveName;
+            hero2Passive1Text.text = fighterRef2.passives[0].description;
             hero2SpellText.text = fighterRef2.fighterSpell.name;
             hero2Passive1Icon.sprite = fighterRef2.passives[0].icon;
+            //hero2SpellText.text = fighterRef2.fighterSpell.name;
             if (heroesData[1].passives.Count > 1)
             {
                 hero2Passive2Icon.sprite = heroesData[1].passives[0].icon;
@@ -74,9 +76,10 @@ public class Team : MonoBehaviour
             GameObject heroInstance3 = Instantiate(heroesData[2].prefab);
             Fighter fighterRef3 = heroInstance3.GetComponent<Fighter>();
             heroName3.text = fighterRef3.unitName;
-            hero3Passive1Text.text = fighterRef3.passives[0].passiveName;
+            hero3Passive1Text.text = fighterRef3.passives[0].description;
             hero3SpellText.text = fighterRef3.fighterSpell.name;
             hero3Passive1Icon.sprite = fighterRef3.passives[0].icon;
+            //hero3SpellText.text = fighterRef3.fighterSpell.name;
             if (heroesData[2].passives.Count > 1)
             {
                 hero3Passive2Icon.sprite = heroesData[2].passives[0].icon;

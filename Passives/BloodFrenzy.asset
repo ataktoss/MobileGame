@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a8eb7b2db7331e47b71638a7301e625, type: 3}
   m_Name: BloodFrenzy
   m_EditorClassIdentifier: 
-  passiveName: 
-  description: 
-  icon: {fileID: 0}
-  type: 0
+  passiveName: BloodFrenzy
+  description: On crit gain 10% attack speed
+  icon: {fileID: 21300000, guid: e977a3d5f801ed244a57b149a4c256be, type: 3}
+  type: 34

@@ -13,7 +13,11 @@ public class EchoFang : Passive, IEffect
         bool chanceToAttackTwice = UnityEngine.Random.value < 0.05f; 
         if (chanceToAttackTwice)
         {
-            fighter.Attack(target, damage);
+            if (target != null && !target.isAlive)
+            {
+                fighter.Attack(target, damage);
+            }
+            
         }
         
     }

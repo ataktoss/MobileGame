@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a8eb7b2db7331e47b71638a7301e625, type: 3}
   m_Name: PainResponse
   m_EditorClassIdentifier: 
-  passiveName: 
-  description: 
-  icon: {fileID: 0}
-  type: 0
+  passiveName: PainResponse
+  description: Whenever taking damage get 5% attack damage
+  icon: {fileID: -386218955779764164, guid: 5e27259dbffbed041832f5ba4066678d, type: 3}
+  type: 41

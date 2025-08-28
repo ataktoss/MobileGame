@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a8eb7b2db7331e47b71638a7301e625, type: 3}
   m_Name: GamblersEdge
   m_EditorClassIdentifier: 
-  passiveName: 
-  description: 
-  icon: {fileID: 0}
-  type: 0
+  passiveName: GamblersEdge
+  description: Attacks deal damage randomly between 50% and 200%
+  icon: {fileID: 7070369275331884597, guid: 3ffe8730e7d3f194fb0ed728fd6826c7, type: 3}
+  type: 43

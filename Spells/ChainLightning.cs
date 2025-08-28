@@ -15,7 +15,7 @@ public class ChainLightning : Spell
         }
         foreach (var enemy in CombatManager.Instance.GetMonsterList())
         {
-            if(enemy != null && !enemy.isAlive)
+            if(enemy != null && enemy.isAlive)
             {
                 enemy.TakeDamage(baseDamage, caster);
             }

@@ -8,7 +8,7 @@ public class RenewingWave : Spell
 
     public override void ApplyEffect(Fighter caster, Fighter target, float spellPower)
     {
-        int finalHeal = (int)(damage*(1+spellPower));
+        int finalHeal = (int)(damage+(spellPower*0.5f));
         foreach(var weaken in target.damageDoneModifiers){
             finalHeal = weaken(finalHeal);
         }

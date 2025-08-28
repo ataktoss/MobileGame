@@ -244,7 +244,7 @@ public class CombatManager : MonoBehaviour
         switch (currentAct)
         {
             case 1:
-                actScaling = 1f;
+                actScaling = 0.8f;
                 break;
             case 2:
                 actScaling = 1.5f;
@@ -421,7 +421,7 @@ public class CombatManager : MonoBehaviour
     }
     public List<Fighter> GetHeroList()
     {
-        UnityEngine.Debug.Log($"Fighter count: {heroes.Count}");
+        //UnityEngine.Debug.Log($"Fighter count: {heroes.Count}");
         return heroes;
     }
     public List<Fighter> GetMonsterList()
@@ -430,7 +430,7 @@ public class CombatManager : MonoBehaviour
     }
     public List<HeroRuntimeData> GetCurrentTeamInfo()
     {
-        UnityEngine.Debug.Log("Returning hero objects");
+        //UnityEngine.Debug.Log("Returning hero objects");
         return currentTeam;
     }
 

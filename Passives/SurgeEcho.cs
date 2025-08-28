@@ -20,8 +20,9 @@ public class SurgeEcho : Passive, IEffect
         numberOfSpellsCast++;
         if (numberOfSpellsCast >= 3)
         {
-            fighter.CastSpell(new ChainLightning("ChainLightning", 0, 0), fighter);
             numberOfSpellsCast = 0;
+            fighter.CastSpell(new ChainLightning("ChainLightning", 0, 0), fighter);
+            
         }
     }
 

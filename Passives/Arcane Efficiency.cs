@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ArcaneEfficiency : Passive,IEffect
 {
-
+    //Passives cost 20% less
     public ArcaneEfficiency():base("Arcane Efficiency","Spells cost 20% less mana"){}
 
     public void Apply(Fighter caster, Fighter target)

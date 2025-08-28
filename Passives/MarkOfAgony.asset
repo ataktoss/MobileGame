@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a8eb7b2db7331e47b71638a7301e625, type: 3}
   m_Name: MarkOfAgony
   m_EditorClassIdentifier: 
-  passiveName: 
-  description: 
-  icon: {fileID: 0}
-  type: 0
+  passiveName: MarkOfAgony
+  description: Every 3 attacks apply 10% damage taken debuff
+  icon: {fileID: 21300000, guid: 77b73c135a726b44a952a67c1dce822c, type: 3}
+  type: 39
