@@ -37,7 +37,8 @@ public class BerserkersTempo : Passive, IEffect
 
     public override void ApplyEffect(Fighter fighter)
     {
-        fighter.ApplyDebuff(new BerserkersTempoBuff(1.2f, 200, 3));
+        fighter.ApplyDebuff(new BerserkersTempoBuff(0.8f, 200, 3));
+        Debug.Log("NOW HAS BERSERKER BUFF");
     }
     
 

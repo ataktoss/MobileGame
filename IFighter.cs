@@ -35,9 +35,9 @@ public class Fighter : MonoBehaviour
     public int spellPower = 0;
     public int numberOfAttacks = 0;
     public int _currentMana = 0;
-    public float basecritChance = 0.05f; 
+    public float basecritChance = 0.05f;
     public float critChance = 0.05f;
-    public float basecritDamage = 2f; 
+    public float basecritDamage = 2f;
     public float critDamage = 2f;
     public int manaGainedFromHits = 5;
     public int currentXP = 0;
@@ -56,6 +56,7 @@ public class Fighter : MonoBehaviour
     public bool melee;
     public bool isAlive = true;
     public bool isAttacking = false;
+    public bool currentlyAttacking = false;
     public bool isFrozen = false;
     public bool isSilenced = false;
     private bool _isProcessingManaChange = false;
@@ -89,7 +90,7 @@ public class Fighter : MonoBehaviour
     private Coroutine attackCoroutine;
 
 
-    public void TakeDamage(int amount,Fighter attacker)
+    public void TakeDamage(int amount, Fighter attacker)
     {
 
         if (this.gameObject != null)
@@ -113,7 +114,7 @@ public class Fighter : MonoBehaviour
 
             foreach (var passive in passives)
             {
-                passive.OnTakeDamage(this,attacker, amount); // <- tell passives
+                passive.OnTakeDamage(this, attacker, amount); // <- tell passives
             }
             if (_currentLife <= 0)
             {
@@ -196,63 +197,72 @@ public class Fighter : MonoBehaviour
 
     public void Attack(Fighter target, int damage)
     {
-        
-        if (isFrozen) return;
-
-        if (fighterSpell != null && _currentMana >= fighterSpell.manaCost)
+        if (currentlyAttacking) return;
+        currentlyAttacking = true;
+        try
         {
-            ChangeMana(-fighterSpell.manaCost);
-            CastSpell(fighterSpell, currentTarget);
-        }
+            if (isFrozen) return;
 
-        bool isCrit = UnityEngine.Random.value < TotalCriticalChance;
-        int finalDamage = damage;
-        if (isCrit)
-        {
-            finalDamage = (int)(damage * TotalCriticalDamage);
-            //Debug.Log("CRITICAL HIT!");
-        }
+            if (fighterSpell != null && _currentMana >= fighterSpell.manaCost)
+            {
+                ChangeMana(-fighterSpell.manaCost);
+                CastSpell(fighterSpell, currentTarget);
+            }
 
-        foreach (var passive in passives)
-        {
-            finalDamage = passive.ModifyDamageDone(this,currentTarget, finalDamage);
+            bool isCrit = UnityEngine.Random.value < TotalCriticalChance;
+            int finalDamage = damage;
             if (isCrit)
             {
-                passive.OnCrit(this, target, finalDamage, isCrit);
+                finalDamage = (int)(damage * TotalCriticalDamage);
+                //Debug.Log("CRITICAL HIT!");
             }
+
+            foreach (var passive in passives)
+            {
+                finalDamage = passive.ModifyDamageDone(this, currentTarget, finalDamage);
+                if (isCrit)
+                {
+                    passive.OnCrit(this, target, finalDamage, isCrit);
+                }
+            }
+            foreach (var mod in damageDoneModifiers)
+            {
+                finalDamage = mod(finalDamage);
+            }
+
+
+            OnAttackPerformed?.Invoke();
+
+
+
+            foreach (var passive in passives)
+            {
+                passive.OnAttack(this, target, damage); // <- tell passives
+            }
+
+
+            foreach (var itemEffect in itemEffects)
+            {
+                finalDamage = itemEffect.OnBeforeAttack(this, target, finalDamage, isCrit);
+            }
+
+            // ITEM BEFORE ATTACK HERE
+
+            target.TakeDamage(finalDamage, this);
+            //Debug.Log("" + unitName + " attacked " + target.unitName + " for " + finalDamage + " damage After damage mods");
+
+            //ITEM AFTER ATTACK HERE
+            foreach (var itemEffect in itemEffects)
+            {
+                itemEffect.OnAfterAttack(this, target, finalDamage, isCrit);
+            }
+            ChangeMana(manaGainedFromHits);
         }
-        foreach (var mod in damageDoneModifiers)
+        finally
         {
-            finalDamage = mod(finalDamage);
+            currentlyAttacking = false;
         }
 
-
-        OnAttackPerformed?.Invoke();
-
-
-
-        foreach (var passive in passives)
-        {
-            passive.OnAttack(this, target, damage); // <- tell passives
-        }
-
-        
-        foreach (var itemEffect in itemEffects)
-        {
-            finalDamage = itemEffect.OnBeforeAttack(this, target, finalDamage, isCrit);
-        }
-        
-        // ITEM BEFORE ATTACK HERE
-
-        target.TakeDamage(finalDamage,this);
-        //Debug.Log("" + unitName + " attacked " + target.unitName + " for " + finalDamage + " damage After damage mods");
-
-        //ITEM AFTER ATTACK HERE
-        foreach (var itemEffect in itemEffects)
-        {
-            itemEffect.OnAfterAttack(this, target, finalDamage, isCrit);
-        }
-        ChangeMana(manaGainedFromHits);
 
 
     }
@@ -288,7 +298,7 @@ public class Fighter : MonoBehaviour
 
         // Mana Event
         OnManaChanged?.Invoke(_currentMana);
-        
+
         _isProcessingManaChange = false;
 
     }
@@ -315,14 +325,14 @@ public class Fighter : MonoBehaviour
     public void ChangeShield(int amount)
     {
         shield += amount;
-        
+
     }
 
     public void AddPassive(Passive newPassive)
     {
         passives.Add(newPassive);
 
-        foreach(var passive in passives)
+        foreach (var passive in passives)
         {
             Debug.Log("The hero :" + unitName + " has passive: " + passive.passiveName);
         }
@@ -420,12 +430,12 @@ public class Fighter : MonoBehaviour
 
     public void SetStatsFromType(FighterType type)
     {
-        
+
         fighterType = type;
         switch (type)
         {
             case FighterType.Assassin:
-                critChance += 0.1f; 
+                critChance += 0.1f;
                 break;
             case FighterType.Mage:
                 //manaGainedFromHits += 5;
@@ -441,7 +451,7 @@ public class Fighter : MonoBehaviour
                 //AddPassive(new FirstAid());
                 break;
         }
-        
+
     }
     public void MoveToward(Vector3 targetPosition)
     {

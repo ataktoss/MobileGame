@@ -12,17 +12,18 @@ public class BerserkersTempoBuff : StatusEffect
 
     public override void OnApply(Fighter target)
     {
-        
+        Debug.Log(target.unitName + " BUFF GOT APPLIED THIS IS FROM OnApply");
     }
 
     public override void OnTimer(Fighter target)
     {
-        target.attackSpeed /= attackSpeedIncrease;
+        target.attackSpeed *= attackSpeedIncrease;
+        Debug.Log("Trying to increase attack speed");
         
     }
 
     public override void OnExpire(Fighter target)
     {
-        //target.attackSpeed /= (1 + attackSpeedIncrease);
+        Debug.Log("Berserkers Tempo expired");
     }
 }

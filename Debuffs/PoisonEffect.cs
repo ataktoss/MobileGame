@@ -20,7 +20,7 @@ public class PoisonEffect : StatusEffect
     {
         if (target != null)
         {
-            Debug.Log("TARGET IS GOING TO TAKE POISON DAMAGE");
+            //Debug.Log("TARGET IS GOING TO TAKE POISON DAMAGE");
             target.TakeDamage(damagePerTurn,target);    
         }
         
